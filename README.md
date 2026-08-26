@@ -56,6 +56,23 @@ Three deliberate differences from the old site:
 3. **`paul@paulrubell .com`** in the interior-page utility bar renders as
    `paul@paulrubell.com` — the stray space was confirmed as a typo.
 
+### Content changes since launch
+
+The Highlighted Transactions list has been edited away from the old site's copy
+at the client's request:
+
+- **Two new entries at the top of the list**, ahead of Naboso:
+  1. *Condominium Offering* — South Street building photo, no body copy,
+     "Paul Rubell, Attorney at Law P.C. represented the Sponsor."
+  2. *Equity Raise* — SUNation Energy, $32,000,000 PIPE transaction,
+     "Paul Rubell, Attorney at Law P.C. represented the Issuer."
+- **Line of Credit** now reads "International Art Trading, LLC received a
+  $25,000,000 line of credit from Morgan Stanley." (was "…received $25,000,000
+  line of credit.")
+
+`llms.txt` and `llms-full.txt` were updated to match. Everything outside the
+Highlighted Transactions section is still a pixel match to the old site.
+
 Behaviour carried over from the live site that is worth knowing about:
 
 - The home hero is a **two-slide background slideshow** (3s cadence, 0.8s

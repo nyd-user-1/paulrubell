@@ -1231,6 +1231,8 @@ button:focus-visible {
 .list-image--realestate { background-image: url(../images/card-realestate-640.jpg); }
 .list-image--corporate  { background-image: url(../images/card-corporate-640.jpg); }
 
+.txn-logo--southstar      { background-image: url(../images/logo-southstar-1222.jpg); }
+.txn-logo--sunation       { background-image: url(../images/logo-sunation-1024.png); }
 .txn-logo--naboso         { background-image: url(../images/logo-naboso-925.png); }
 .txn-logo--indaba         { background-image: url(../images/logo-indaba-1026.png); }
 .txn-logo--cyberus        { background-image: url(../images/logo-cyberus-594.png); }
@@ -1247,6 +1249,8 @@ button:focus-visible {
   .card-img--business   { background-image: url(../images/card-business-640.jpg); }
   .card-img--corporate  { background-image: url(../images/card-corporate-640.jpg); }
   .card-img--realestate { background-image: url(../images/card-realestate-640.jpg); }
+  .txn-logo--southstar  { background-image: url(../images/logo-southstar-640.jpg); }
+  .txn-logo--sunation   { background-image: url(../images/logo-sunation-640.png); }
   .txn-logo--indaba     { background-image: url(../images/logo-indaba-640.png); }
   .txn-logo--naboso     { background-image: url(../images/logo-naboso-640.png); }
   .txn-logo--morganstanley { background-image: url(../images/logo-morganstanley-640.jpg); }

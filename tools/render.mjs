@@ -382,6 +382,17 @@ const CARDS = [
 
 const TXNS = [
   {
+    logo: 'logo-southstar', ext: 'jpg', logoWidths: [640, 1222], alt: 'South Street condominium building',
+    title: 'Condominium Offering', titleInk: 'black',
+    body: `<p class="attrib"><strong>Paul Rubell, Attorney at Law P.C. represented the Sponsor.</strong></p>`,
+  },
+  {
+    logo: 'logo-sunation', ext: 'png', logoWidths: [640, 1024], alt: 'SUNation Energy',
+    title: 'Equity Raise', titleInk: 'black',
+    body: `<p><span>SUNation Energy, a public company and leading provider of solar and battery storage, raised $32,000,000 in a PIPE transaction.</span></p>
+              <p class="attrib"><strong>Paul Rubell, Attorney at Law P.C. represented the Issuer.</strong></p>`,
+  },
+  {
     logo: 'logo-naboso', ext: 'png', logoWidths: [640, 925], alt: 'Naboso',
     title: 'Venture Capital Investment', titleInk: 'black',
     body: `<p><span>Naboso, a&nbsp;</span><strong>manufacturer of proprietary&nbsp;</strong><span>footwear products based on the first-ever small nerve proprioceptive material commercially available and designed for the purpose of improving posture and enhancing movement, received a $3,000,000 Venture Capital Investment from Protea Japan.</span></p>
@@ -408,7 +419,7 @@ const TXNS = [
   {
     logo: 'logo-morganstanley', ext: 'jpg', logoWidths: [640, 854], alt: 'Morgan Stanley',
     title: 'Line of Credit', titleInk: 'black',
-    body: `<p><span>International Art Trading, LLC received</span> <strong>$25,000,000 line of credit.</strong></p>
+    body: `<p><span>International Art Trading, LLC received a</span> <strong>$25,000,000 line of credit from Morgan Stanley.</strong></p>
               <p class="attrib"><strong>Paul Rubell, Attorney at Law P.C.&nbsp;represented the Borrower.</strong></p>`,
   },
 ];
