@@ -1,0 +1,1280 @@
+@charset "UTF-8";
+/* ==========================================================================
+   Paul Rubell, Attorney At Law, P.C.
+   Static rebuild of www.paulrubell.com
+   Values transcribed from the live site's computed styles.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Fonts (self-hosted, variable)
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../fonts/montserrat-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../fonts/montserrat-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../fonts/montserrat-italic-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url(../fonts/opensans-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url(../fonts/opensans-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url(../fonts/opensans-italic-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Metric-matched fallbacks, so swapping in the webfont doesn't shift layout. */
+@font-face {
+  font-family: 'Montserrat Fallback';
+  src: local('Arial');
+  ascent-override: 100.4%;
+  descent-override: 26.03%;
+  line-gap-override: 0%;
+  size-adjust: 96.42%;
+}
+@font-face {
+  font-family: 'Open Sans Fallback';
+  src: local('Arial');
+  ascent-override: 101.65%;
+  descent-override: 27.86%;
+  line-gap-override: 0%;
+  size-adjust: 105.16%;
+}
+
+/* --------------------------------------------------------------------------
+   2. Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  --blue: #0075bb;          /* rgb(0,117,187)   links, dividers, nav bar     */
+  --blue-badge: #0367a6;    /* rgb(3,103,166)   Super Lawyers badge border   */
+  --dark: #272725;          /* rgb(39,39,37)    footer + home utility bar    */
+  --topbar-inner: #2e2e2e;  /* rgb(46,46,46)    interior utility bar         */
+  --gray-body: #888a8c;     /* rgb(136,138,140) default body copy            */
+  --gray-333: #333333;
+  --nav-dark: #2f313d;      /* rgb(47,49,61)    home nav + dropdown items    */
+  --contact-ink: #3c3e47;   /* rgb(60,62,71)    contact page blocks          */
+  --alt-bg: #f9f9f9;        /* practice areas band                           */
+  --rule: #d9d9d9;          /* transaction separators                        */
+  --page-bg: #eeeeee;
+  --mont: 'Montserrat', 'Montserrat Fallback', Arial, sans-serif;
+  --sans: 'Open Sans', 'Open Sans Fallback', Arial, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   3. Reset / base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page-bg);
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--gray-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, ol, figure { margin: 0; padding: 0; font-size: inherit; font-weight: inherit; }
+ul, ol { list-style: none; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+hr { border: none; margin: 0; }
+b, strong { font-weight: 700; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+  white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 12px 18px;
+  background: #fff;
+  color: var(--blue);
+  font-family: var(--mont);
+  font-size: 14px;
+}
+.skip-link:focus { left: 0; }
+
+/* Visible keyboard focus everywhere. */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.navrow a:focus-visible,
+.drawer a:focus-visible,
+.m-header a:focus-visible,
+.m-header button:focus-visible,
+.hero a:focus-visible {
+  outline-color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   4. Page shell + grid
+   The live site centres a 960px column inside rows that carry their own
+   horizontal padding; "full" rows let the column run the row's full width.
+   -------------------------------------------------------------------------- */
+.site {
+  background: #fff;
+  position: relative;
+  min-height: 900px;
+}
+
+.row {
+  position: relative;
+  width: 100%;
+  padding: 15px 40px;
+}
+.wrap {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+}
+.row--full > .wrap { max-width: 100%; }
+
+.col { position: relative; width: 100%; }
+.c2  { width: 16.66667%; }
+.c4  { width: 33.33333%; }
+.c5  { width: 41.66667%; }
+.c6  { width: 50%; }
+.c7  { width: 58.33333%; }
+.c10 { width: 83.33333%; }
+.c12 { width: 100%; }
+
+/* Duda's gutter model: 0.75% each side, halved at the ends, none when alone. */
+.wrap > .col { padding-left: .75%; padding-right: .75%; }
+.wrap > .col:first-child { padding-left: 0; padding-right: 1.5%; }
+.wrap > .col:last-child  { padding-right: 0; padding-left: 1.5%; }
+.wrap > .col:only-child  { padding-left: 0; padding-right: 0; }
+.wrap > .col.no-gutter   { padding-left: 0; padding-right: 0; }
+
+/* --------------------------------------------------------------------------
+   5. Utility bar
+   -------------------------------------------------------------------------- */
+.topbar { padding: 5px 15px; background: var(--topbar-inner); }
+.topbar--home { padding: 5px 0; background: var(--dark); }
+
+.topbar .social { text-align: left; }
+.topbar .social a { display: inline-block; margin-right: 3px; }
+.topbar--home .social a { margin-right: 10px; }
+
+.icon-mail { width: 23px; height: 23px; color: #fff; }
+.topbar--home .icon-mail { width: 20px; height: 20px; }
+
+.topbar .contact-line {
+  padding: 2px 0;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  text-align: right;
+  color: #fff;
+}
+.topbar .contact-line a { color: var(--blue); }
+.topbar .contact-line a:hover { text-decoration: underline; }
+
+/* The home utility bar sits 14px past the 960px column, exactly as on the
+   live site (its paragraph is 100% wide with a negative-ish left offset). */
+.topbar--home .contact-col { padding-left: 0 !important; padding-right: 0 !important; }
+.topbar--home .contact-line {
+  width: 100%;
+  margin-left: calc(100% - 466px);
+}
+
+/* --------------------------------------------------------------------------
+   6. Header rows
+   -------------------------------------------------------------------------- */
+/* Interior pages: solid blue band, nav right, brand column intentionally
+   empty (the live site leaves it empty on every page but the home page). */
+.navrow {
+  padding: 15px;
+  background: var(--blue);
+}
+/* The live site reserves 160px of flow for a 168px header, so the nav band
+   overlaps the top of the page hero by 8px. Desktop layout only. */
+@media (min-width: 768px) {
+  .page-inner .site-header { position: relative; z-index: 2; margin-bottom: -8px; }
+}
+.navrow .brand-col { min-height: 100px; }
+.navrow .nav-col { padding-left: 10px !important; padding-right: 0 !important; }
+
+/* Home: white band carrying the badge + wordmark, nav right. */
+.navrow--home {
+  padding: 0 0 10px;
+  background: #fff;
+}
+.navrow--home > .wrap > .col { padding-left: 0; padding-right: 0; }
+
+.brandbar { padding: 15px 0; }
+.brandbar .wrap { max-width: none; }
+.brandbar .badge-col { padding-left: 0; padding-right: 1.5%; }
+.brandbar .name-col  { padding: 0 0 2px; }
+
+.badge-link { display: block; }
+.badge-img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--blue-badge);
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, .25) 0 3px 11px 0;
+}
+
+.brand-name {
+  font-family: var(--mont);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gray-333);
+  text-align: left;
+}
+.brand-sub {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--gray-333);
+  text-align: left;
+}
+
+/* --------------------------------------------------------------------------
+   7. Primary navigation
+   -------------------------------------------------------------------------- */
+.mainnav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+  position: relative;
+  width: 100%;
+  padding: 12px 0 12px 15px;
+  margin: 23px 0 0;
+}
+.mainnav--home {
+  width: calc(100% - 64px);
+  max-width: 416px;
+  padding: 12px 0;
+  margin: 20px 0 0 64px;
+}
+.mainnav > ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.mainnav > ul > li {
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  font-weight: 400;
+}
+.mainnav > ul > li > a {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  position: relative;
+  padding: 0 15px;
+  font-family: var(--mont);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: .03em;
+  color: #fff;
+}
+.mainnav--home > ul > li > a { color: var(--nav-dark); }
+
+.mainnav .nav-item-text { display: block; white-space: nowrap; }
+
+/* The underline that slides in on hover / for the current page. */
+.mainnav > ul > li > a .nav-item-text::before,
+.mainnav > ul > li > a .nav-item-text::after,
+.drawer nav > ul > li > a .nav-item-text::before,
+.drawer nav > ul > li > a .nav-item-text::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 0;
+  border: 0 solid transparent;
+  border-top: 2px solid currentColor;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s ease-out, opacity .3s ease-out;
+}
+.mainnav > ul > li > a .nav-item-text::before,
+.drawer nav > ul > li > a .nav-item-text::before {
+  margin-bottom: .2em;
+  border-top-color: transparent;
+}
+.mainnav > ul > li > a .nav-item-text::after,
+.drawer nav > ul > li > a .nav-item-text::after { margin-top: .2em; }
+
+.mainnav > ul > li > a:hover .nav-item-text::after,
+.mainnav > ul > li > a:focus-visible .nav-item-text::after,
+.mainnav > ul > li.is-current > a .nav-item-text::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+.mainnav > ul > li.is-current > a { font-weight: 700; }
+
+.nav-chevron {
+  display: inline-block;
+  width: 19px;
+  height: 18px;
+  padding-left: 10px;
+  vertical-align: top;
+  flex: none;
+}
+.nav-chevron svg { width: 9px; height: 18px; overflow: visible; }
+
+/* Dropdown */
+.mainnav .subnav {
+  position: absolute;
+  top: 100%;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  min-width: 133.2px;
+  background: #fff;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity .3s ease-out, transform .3s ease-out;
+}
+.mainnav li:hover > .subnav,
+.mainnav li:focus-within > .subnav,
+.mainnav li.is-open > .subnav {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.mainnav .subnav > li { display: flex; flex-direction: column; }
+.mainnav .subnav > li:not(:last-child) { border-bottom: 1px solid #d1d1d1; }
+.mainnav .subnav > li > a {
+  display: flex;
+  align-items: center;
+  padding: 15px 30px 15px 15px;
+  font-family: var(--mont);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: .03em;
+  color: var(--nav-dark);
+  white-space: nowrap;
+}
+.mainnav .subnav > li > a:hover { color: var(--blue); }
+.mainnav .subnav > li.is-current > a { color: #fff; background: var(--blue); }
+.mainnav--home .subnav > li.is-current > a { color: var(--blue); background: transparent; }
+
+/* --------------------------------------------------------------------------
+   8. Mobile header + drawer  (hidden until the small breakpoint)
+   -------------------------------------------------------------------------- */
+.m-header, .drawer, .drawer-overlay, .hamburger { display: none; }
+
+/* --------------------------------------------------------------------------
+   9. Home hero
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  padding: 156px 50px 206px;
+  background-color: rgba(0, 0, 0, .5);
+  overflow: hidden;
+  text-align: start;
+}
+/* Two-slide background rotation, matching the live hero. */
+.hero-slides { position: absolute; inset: 0; }
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  transform: translateY(100%);
+}
+.hero-slide.is-active { transform: translateY(0); }
+.hero-slides.is-animating .hero-slide { transition: transform .8s cubic-bezier(.22, .61, .36, 1); }
+.hero-slide.is-leaving { transform: translateY(-100%); }
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: .63;
+  z-index: 1;
+}
+.hero > .wrap { position: relative; z-index: 2; }
+
+.hero h1 {
+  width: 798px;
+  max-width: 100%;
+  margin: 0 0 8px;
+  padding: 2px 0;
+  font-family: var(--mont);
+  font-size: 85px;
+  font-weight: 700;
+  color: #fff;
+  text-align: left;
+}
+.hero h2 {
+  width: 100%;
+  max-width: 100%;
+  margin: -8px auto 8px;
+  padding: 2px 0;
+  font-family: var(--mont);
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  text-align: left;
+}
+.hero .tagline {
+  width: 798px;
+  max-width: 100%;
+  margin: 23px 0 8px;
+  padding: 2px 0;
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gray-body);
+  text-align: left;
+}
+.hero .tagline span { font-weight: 300; color: #fff; }
+
+.btn-call {
+  display: none;
+  position: relative;
+  max-width: 100%;
+  margin: 45px 0 10px;
+  border: 2px solid #fff;
+  border-radius: 50px;
+  box-shadow: var(--gray-body) 0 3px 11px 0;
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  white-space: nowrap;
+}
+.btn-call .text {
+  display: inline-block;
+  max-width: 98%;
+  padding: 10px 0;
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   10. Home sections
+   -------------------------------------------------------------------------- */
+.welcome { padding: 60px 40px; background: #fff; text-align: center; }
+.welcome .lede {
+  width: calc(100% - 208px);
+  max-width: 1060px;
+  margin: 18px auto 8px;
+  padding: 2px 0;
+}
+.welcome .lede h2 {
+  font-family: var(--mont);
+  font-size: 35px;
+  font-weight: 700;
+  color: var(--nav-dark);
+  text-align: center;
+}
+.welcome .lede h2 a { color: var(--blue); }
+.welcome .lede h2 a:hover { text-decoration: underline; }
+
+.divider { display: flow-root; width: 41.99px; max-width: 100%; margin: 0 auto; text-align: center; }
+.divider hr { border-top: 2px solid var(--blue); margin: 10px 0; }
+.divider--left { margin: 0; }
+.divider--thick hr { border-top-width: 4px; }
+.divider--wide { width: 100%; }
+.divider--dotted hr { border-top: 2px dotted var(--blue); }
+
+.welcome .kicker { margin: 8px 0; padding: 2px 0; }
+.welcome .kicker p {
+  font-size: 26px;
+  font-weight: 400;
+  text-align: center;
+}
+.welcome .kicker span {
+  font-family: var(--mont);
+  color: var(--gray-333);
+}
+.welcome .body {
+  width: calc(100% - 208px);
+  max-width: 1060px;
+  margin: 21px auto 8px;
+  padding: 2px 0;
+  text-align: left;
+}
+.welcome .body p {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 400;
+  color: #000;
+  text-align: left;
+}
+.welcome .body p + p { margin-top: 24px; }
+
+/* Practice-area gallery -------------------------------------------------- */
+.practice { padding: 60px 40px; background: var(--alt-bg); text-align: center; }
+.practice h2 {
+  padding: 2px 0;
+  font-family: var(--mont);
+  font-size: 35px;
+  font-weight: 700;
+  color: var(--nav-dark);
+  text-align: center;
+}
+
+.gallery { padding: 10px; margin: 10px 0; }
+.gallery-inner { padding: 5px; }
+.gallery-row { display: flex; flex-wrap: wrap; }
+.gallery-col { width: 33.33333%; }
+.gallery-thumb { padding: 5px; }
+.gallery-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+.gallery-card .card-img {
+  display: block;
+  width: 100%;
+  padding-top: 100%;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+.gallery-card .caption {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px;
+  background: var(--blue);
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+.gallery-card .caption-title {
+  display: block;
+  max-width: 100%;
+  font-family: var(--mont);
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+}
+.gallery-card .caption-text {
+  display: block;
+  font-family: var(--sans);
+  font-size: 16px;
+  color: #fff;
+}
+.gallery-card .caption-copy {
+  display: block;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+}
+
+/* Highlighted transactions ----------------------------------------------- */
+.transactions { padding: 60px 40px; background: #fff; }
+.transactions .intro-col { padding: 0 16px 16px !important; }
+.transactions .intro-col h2 {
+  max-width: 480.64px;
+  margin: 0 0 16px;
+  padding: 2px 0;
+  font-family: var(--mont);
+  font-size: 35px;
+  font-weight: 700;
+  color: #000;
+  text-align: left;
+}
+.transactions .intro-col .divider { margin: 0; }
+.transactions .intro-col p {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--gray-333);
+  text-align: left;
+}
+.transactions .intro-col .intro-body { max-width: 409.64px; margin: 8px 0; padding: 2px 0; }
+.transactions .intro-col .intro-body p + p { margin-top: 24px; }
+
+.transactions .list-col { padding: 0 0 0 30px !important; }
+.txn { display: flex; flex-wrap: wrap; position: relative; margin: 20px 0; }
+.txn:first-child { margin-top: 0; }
+.txn:last-child { margin-bottom: 0; }
+.txn-rule { padding: 10px 0; margin: 0; }
+.txn-rule hr {
+  box-sizing: content-box;
+  border-top: 1px solid var(--rule);
+  min-height: 2px;
+  margin: 10px 0;
+}
+/* The Blue Orb entry's separator sits inside its own column and has no
+   leading gap after the preceding rule — reproduced from the live page. */
+.txn--flush { margin-top: 0 !important; }
+.txn-logo {
+  width: 41.66667%;
+  min-height: 100px;
+  padding: 90px 0;
+  border-radius: 8px;
+  background-size: contain;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+.txn-body { width: 58.33333%; padding: 8px 0 8px 24px; }
+.txn-body h3 {
+  margin: 8px 0 0;
+  padding: 2px 0;
+  font-family: var(--mont);
+  font-size: 26px;
+  font-weight: 700;
+  color: #000;
+  text-align: left;
+}
+.txn-body h3.ink-333 { color: var(--gray-333); }
+.txn-body .txn-copy { margin: 8px 0; padding: 2px 0; }
+.txn:first-child .txn-copy { margin-bottom: 0; }
+.txn-body p {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-333);
+  text-align: left;
+}
+.txn-body p + p { margin-top: 22px; }
+.txn-body p strong { font-weight: 500; }
+.txn-body p.attrib strong { font-weight: 700; }
+
+/* --------------------------------------------------------------------------
+   11. Interior pages
+   -------------------------------------------------------------------------- */
+.page-hero {
+  position: relative;
+  height: 238px;
+  padding: 77px 50px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: .65;
+}
+/* The about hero attaches its background to the viewport, so `cover` scales
+   against the viewport rather than the 238px band. Matches the live site. */
+.page-hero--parallax { background-attachment: fixed; }
+.page-hero--about { background-position: 50% -29.93px; }
+.page-hero--realestate { background-position: 50% 100%; }
+
+.section { padding: 80px 30px 30px; }
+.section--tail { padding: 0 30px 80px; }
+.section--pa-intro { padding: 80px 40px 30px; }
+.section--pa-list { padding: 30px 40px; }
+.section--practice { padding: 80px 40px; }
+.section--contact-title { padding: 80px 30px 50px; }
+.section--contact-blocks { padding: 0 30px 80px; background: #fff; }
+.contact-spacer { height: 100px; background: #fff; }
+
+.page-title {
+  margin: 8px 0;
+  padding: 2px 0;
+  font-family: var(--mont);
+  font-size: 35px;
+  font-weight: 400;
+  color: var(--dark);
+  text-align: left;
+}
+.page-title--center { text-align: center; }
+.page-title--flush { margin: 0 0 8px; }
+
+.prose {
+  margin: 10px 0 0;
+  /* modifiers below carry the per-page top margins used by the live site */
+  padding: 2px 0;
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--gray-body);
+  text-align: left;
+}
+.prose p + p { margin-top: 24px; }
+.prose--gap23 { margin: 23px 0 0; }
+.prose--gap8  { margin: 8px 0; }
+.prose--15 { margin: 8px 0; }
+/* Blocks that reproduce the live page's literal blank lines instead of margins. */
+.prose--lines p + p { margin-top: 0; }
+.prose--16 { font-size: 16px; font-weight: 400; }
+.prose--16 p + p { margin-top: 22px; }
+.prose em, .prose i { font-style: italic; }
+
+.subhead {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-body);
+}
+
+.mission-title {
+  margin: 8px 0;
+  padding: 2px 0;
+  font-family: var(--mont);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--blue);
+  text-align: left;
+}
+
+.gutter-30 { padding: 0 30px !important; }
+
+/* Practice-areas "List of Services" -------------------------------------- */
+.services { width: 100%; }
+.services > li {
+  padding: 0 0 20px;
+  margin: 20px 0;
+  border-bottom: 1px solid #c0c0c0;
+}
+.services .biglink {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  min-height: 195px;
+  padding: 0;
+}
+.services .list-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 195px;
+  height: 195px;
+  background-color: #fff;
+  background-position: 50% 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.services .list-text { width: 100%; padding: 0 15px 0 230px; }
+.services .item-name {
+  display: block;
+  max-width: 100%;
+  margin: 0 0 20px;
+  font-family: var(--mont);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--blue);
+  text-align: left;
+}
+.services .item-text {
+  display: inline-block;
+  max-width: 100%;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--gray-body);
+  white-space: pre-line;
+  text-align: left;
+}
+.services .link {
+  display: block;
+  width: 100%;
+  padding: 0 15px 0 230px;
+  margin: 10px 0 0;
+}
+.services .button-text {
+  display: block;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--blue);
+}
+.services .button-text::after {
+  content: '>>';
+  margin-left: 10px;
+  font-size: 14px;
+  color: var(--blue);
+}
+/* The stray "List Item N" labels are in the live markup but hidden. */
+.services .link .item-name { display: none; }
+.services .biglink:hover .button-text { text-decoration: underline; }
+
+/* Contact page blocks ----------------------------------------------------- */
+.contact-block .cb-body { padding: 2px 0; }
+.contact-block--address .cb-body,
+.contact-block--email .cb-body { margin-bottom: 8px; }
+.contact-block p {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--contact-ink);
+  text-align: center;
+}
+.contact-block p strong,
+.contact-block p b { font-weight: 700; }
+/* The live widget is a fixed 154.38px block offset 71.8px from the column's
+   left edge, which reads as centred at 1440 and right-of-centre at 768. */
+.contact-social { width: 154.38px; margin: 16px 71.8px 0; text-align: center; }
+.contact-social a {
+  display: inline-block;
+  margin-right: 10px;
+  color: var(--blue);
+  vertical-align: top;
+}
+.contact-social svg { width: 20px; height: 25px; }
+
+/* --------------------------------------------------------------------------
+   12. Footer
+   -------------------------------------------------------------------------- */
+.site-footer { background: var(--dark); color: #666; }
+.footer-main { padding: 50px 40px; }
+.footer-brand .brand-block { margin: 8px 0; padding: 0 0 2px; }
+.footer-brand h2 {
+  font-family: var(--mont);
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  text-align: left;
+}
+.footer-brand p {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 400;
+  color: #fff;
+  text-align: left;
+}
+.footer-badge { margin-top: 26px; }
+.footer-badge img {
+  width: 108px;
+  height: auto;
+  border: 4px solid var(--blue-badge);
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, .25) 0 3px 11px 0;
+}
+.footer-contact { padding-left: 30px !important; }
+.footer-contact .contact-head { margin: 20px 0 8px; padding: 2px 0; }
+.footer-contact h2 {
+  font-family: var(--mont);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--blue);
+  text-align: right;
+}
+.footer-address { margin: 8px 0; }
+.footer-address p,
+.footer-links p {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  text-align: right;
+}
+.footer-links { margin: 8px 0; }
+.footer-links a { color: var(--blue); }
+.footer-links a:hover { text-decoration: underline; }
+.footer-links .mail { font-style: italic; }
+
+.footer-legal { padding: 15px 40px; }
+.copyright {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gray-body);
+  text-align: center;
+}
+.copyright a { color: var(--blue); }
+.copyright a:hover { text-decoration: underline; }
+
+/* --------------------------------------------------------------------------
+   13. Medium screens (768 – 1024): the gallery caption stops being a hover
+        overlay and sits underneath the image, exactly as on the live site.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .gallery-card .caption {
+    position: relative;
+    padding: 15px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .gallery-card { position: relative; }
+  .gallery-card .caption {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: .3s ease-out;
+  }
+  .gallery-card:hover .caption,
+  .gallery-card:focus-visible .caption,
+  .gallery-card:focus-within .caption {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   14. Small screens (≤ 767): the live site's mobile design
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  /* --- header swap ---------------------------------------------------- */
+  .topbar, .navrow, .navrow--home, .brandbar { display: none; }
+
+  .m-header {
+    display: block;
+    position: relative;
+    z-index: 5;
+  }
+  .m-header .bar {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    background: var(--blue);
+    min-height: 75px;
+  }
+  .m-header .bar > div { display: flex; align-items: center; height: 55px; }
+  .m-header .slot-left  { width: 16.66667%; padding: 0 15px; }
+  .m-header .slot-mid   { width: 66.66667%; padding: 0 10px; justify-content: center; }
+  .m-header .slot-right { width: 16.66667%; padding: 0 10px 0 0; justify-content: flex-end; }
+  .m-header .wordmark { display: block; margin-top: 6px; }
+  .m-header .wordmark img { width: 127px; height: auto; }
+  .m-header .phone { display: inline-block; }
+  .m-header .phone svg { width: 35px; height: 31px; fill: #fff; }
+
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: 17.5px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    padding: 13px 9px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    z-index: 14;
+  }
+  .hamburger .slice {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  .hamburger[aria-expanded='true'] .slice:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hamburger[aria-expanded='true'] .slice:nth-child(2) { opacity: 0; }
+  .hamburger[aria-expanded='true'] .slice:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .drawer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 75%;
+    max-width: 281.25px;
+    height: 100%;
+    padding: 30px 20px 0;
+    background: var(--blue);
+    overflow: auto;
+    transform: translateX(-100%);
+    transition: transform .3s ease;
+    z-index: 13;
+  }
+  .drawer.is-open { transform: translateX(0); }
+
+  .drawer-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease, visibility .3s;
+    z-index: 6;
+  }
+  .drawer-overlay.is-visible { opacity: 1; visibility: visible; }
+
+  .drawer nav > ul > li > a {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: .03em;
+    color: #fff;
+    text-align: left;
+  }
+  .drawer .nav-chevron { padding-left: 10px; }
+  .drawer .nav-chevron svg { width: 11px; height: 20px; }
+  .drawer .subnav { padding-left: 0; }
+  .drawer .subnav > li > a {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: .03em;
+    color: #fff;
+  }
+  .drawer .subnav { display: block; }
+
+  .drawer nav { padding-bottom: 15px; }
+  .drawer .drawer-foot { display: flow-root; margin-top: auto; padding-bottom: 25px; }
+  .drawer .drawer-foot .foot-line { margin: 8px 0; padding: 2px 0; }
+  .drawer .drawer-foot .label {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .drawer .drawer-foot p {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+  }
+  .drawer .drawer-foot .icons { margin: 15px 0 0; }
+  .drawer .drawer-foot .icons a {
+    display: inline-block;
+    margin-right: 11px;
+    color: #fff;
+  }
+  .drawer .drawer-foot .icons svg { width: 25px; height: 30px; }
+
+  /* --- home ------------------------------------------------------------ */
+  .hero { padding: 50px 15px; text-align: center; }
+  .hero-slide { background-position: 50% 50%; }
+  .hero > .wrap > .col { padding: 0 15px !important; }
+  .hero h1 { width: auto; margin: 8px 0; font-size: 36px; }
+  .hero h2 { margin: 8px 0; font-size: 36px; }
+  .hero .tagline { width: auto; margin: 13px 0 8px; font-size: 15px; }
+  .btn-call {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 57px;
+  }
+
+  .welcome { padding: 50px 0; }
+  .welcome > .wrap > .col { padding: 0 15px !important; }
+  .welcome .lede { width: 100%; margin: 8px 0; }
+  .welcome .lede h2 { font-size: 24px; }
+  .divider { width: 65px; }
+  .divider--wide { width: 100%; }
+  .welcome .kicker { margin: 30px 0 8px; }
+  .welcome .kicker p { font-size: 26px; }
+  .welcome .body { width: 100%; margin: 30px 0 8px; }
+  .welcome .body p { font-size: 15px; }
+  .welcome .body p + p { margin-top: 20px; }
+
+  .practice { padding: 15px 0; }
+  .practice > .wrap > .col { padding: 0 15px !important; }
+  .practice h2 { margin: 0 0 8px; font-size: 24px; }
+  .gallery { padding: 0; margin: 0 0 10px; }
+  .gallery-inner { padding: 5.5px; }
+  .gallery-col { width: 100%; }
+  .gallery-thumb { padding: 5.5px; }
+  .gallery-card .caption { padding: 15px 10px; }
+  .gallery-card .caption-title { font-size: 21px; }
+
+  .transactions { padding: 40px 16px; }
+  .transactions .intro-col,
+  .transactions .list-col { width: 100%; }
+  .transactions .intro-col { padding: 16px 16px 24px !important; }
+  .transactions .list-col { padding: 0 15px !important; }
+  .transactions .intro-col h2 { max-width: none; margin: 6px 0 0; font-size: 24px; }
+  .transactions .intro-col .intro-body { max-width: none; margin: 8px 0 0; }
+  .transactions .intro-col p { font-size: 15px; }
+  .transactions .intro-col .intro-body p + p { margin-top: 20px; }
+
+  .txn { margin: 20px 0 0; }
+  .txn:first-child { margin-top: 0; }
+  .txn-logo, .txn-body { width: 100%; }
+  .txn-logo { padding: 80px 0; }
+  .txn-body { padding: 0; }
+  .txn-body h3 { margin: 8px 0; font-size: 23px; }
+  .txn-body .txn-copy { margin: 8px 0; }
+  .txn:first-child .txn-body h3 { margin: 16px 0 0; }
+  .txn:first-child .txn-copy { margin: 4px 0 16px; }
+  .txn:first-child + .txn-rule { margin: 12px 0 10px; }
+
+  /* --- interior pages -------------------------------------------------- */
+  .page-hero { height: 135px; padding: 50px 25px; background-position: 50% 50% !important; }
+  .page-hero--parallax { background-attachment: scroll; }
+  .section { padding: 30px 0 10px; }
+  .section--practice,
+  .section--pa-intro { padding: 50px 0; }
+  .section--tail { padding: 0 0 50px; }
+  .section--pa-list { padding: 15px 0; }
+  .section--contact-title { padding: 30px 0 10px; }
+  .section--contact-blocks { padding: 0 0 30px; }
+  .section > .wrap > .col,
+  .section--practice > .wrap > .col,
+  .section--pa-intro > .wrap > .col,
+  .section--pa-list > .wrap > .col,
+  .section--tail > .wrap > .col,
+  .section--contact-title > .wrap > .col,
+  .section--contact-blocks > .wrap > .col { padding: 0 15px !important; }
+  .gutter-30 { padding: 0 15px !important; }
+  .page-title { font-size: 24px; margin: 0 0 8px; }
+  .prose { margin: 8px 0; font-size: 15px; }
+  .prose--15 { font-size: 15px; }
+  .prose--16 { font-size: 16px; }
+  .prose--16 { font-size: 16px; }
+  .mission-title { font-size: 23px; }
+
+  .services > li { padding: 0; margin: 0 0 10px; }
+  .services .biglink { min-height: 100px; }
+  .services .list-image { width: 33%; height: 100px; background-position: 50% 49%; }
+  .services .list-text { padding: 0 0 0 35%; font-size: 14px; }
+  .services .item-name { margin: 0; font-size: 14px; font-weight: 700; }
+  .services .item-text { font-size: 14px; }
+  .services .link { padding: 0 0 0 35%; margin: 0; }
+  .services .button-text { padding: 5px 0; font-size: 14px; line-height: .8; color: #828383; }
+  .services .button-text::after { content: none; }
+
+  .contact-block { width: 100%; padding: 0 15px !important; margin: 0; }
+  .contact-block--phone .cb-body   { margin: 8px 0; }
+  .contact-block--address .cb-body { margin: 18px 0 8px; }
+  .contact-block--email .cb-body   { margin: 8px 0; }
+  .contact-social { width: auto; margin: 10px 0 0; }
+  .contact-social svg { width: 28px; height: 33px; }
+  .contact-social a { margin-right: 0; }
+  .contact-spacer { height: 115px; }
+
+  /* --- footer ----------------------------------------------------------- */
+  .footer-main { padding: 50px 13px; }
+  .footer-main > .wrap > .col { width: 100%; padding: 0 15px !important; }
+  .footer-main > .wrap > .footer-contact { padding: 20px 15px 0 !important; }
+  .footer-brand .brand-block { margin: 8px 0; padding: 2px 0; }
+  .footer-brand h2 { font-size: 23px; }
+  .footer-brand p { font-size: 15px; }
+  .footer-badge { margin-top: 22px; text-align: center; }
+  .footer-badge img { width: 185px; margin: 0 auto; }
+  .footer-contact .contact-head,
+  .footer-address { display: none; }
+  .footer-links { margin: 8px 0; padding: 2px 0; text-align: center; }
+  .footer-links p { text-align: center; }
+  .footer-legal { padding: 15px 0; }
+  .footer-legal > .wrap > .col { padding: 0 15px !important; }
+}
+
+/* --------------------------------------------------------------------------
+   16. Background imagery
+   Kept in CSS (rather than inline styles) so each breakpoint can pull a
+   size-appropriate file. Widths mirror the layout breakpoints.
+   -------------------------------------------------------------------------- */
+.hero-slide--1        { background-image: url(../images/hero-home-1920.jpg); }
+.hero-slide--2        { background-image: url(../images/hero-home-2-1920.jpg); }
+.page-hero--about     { background-image: url(../images/hero-about-1920.jpg); }
+.page-hero--litigation{ background-image: url(../images/card-business-1440.jpg); }
+.page-hero--realestate{ background-image: url(../images/hero-realestate-1920.jpg); }
+.page-hero--corporate { background-image: url(../images/hero-corporate-1920.jpg); }
+
+.card-img--business   { background-image: url(../images/card-business-1000.jpg); }
+.card-img--corporate  { background-image: url(../images/card-corporate-1000.jpg); }
+.card-img--realestate { background-image: url(../images/card-realestate-1000.jpg); }
+
+.list-image--realestate { background-image: url(../images/card-realestate-640.jpg); }
+.list-image--corporate  { background-image: url(../images/card-corporate-640.jpg); }
+
+.txn-logo--naboso         { background-image: url(../images/logo-naboso-925.png); }
+.txn-logo--indaba         { background-image: url(../images/logo-indaba-1026.png); }
+.txn-logo--cyberus        { background-image: url(../images/logo-cyberus-594.png); }
+.txn-logo--blueorb        { background-image: url(../images/logo-blueorb-200.jpeg); }
+.txn-logo--morganstanley  { background-image: url(../images/logo-morganstanley-854.jpg); }
+
+@media (max-width: 1024px) {
+  .hero-slide--1        { background-image: url(../images/hero-home-1024.jpg); }
+  .hero-slide--2        { background-image: url(../images/hero-home-2-1024.jpg); }
+  .page-hero--about     { background-image: url(../images/hero-about-1024.jpg); }
+  .page-hero--litigation{ background-image: url(../images/card-business-1000.jpg); }
+  .page-hero--realestate{ background-image: url(../images/hero-realestate-1024.jpg); }
+  .page-hero--corporate { background-image: url(../images/hero-corporate-1024.jpg); }
+  .card-img--business   { background-image: url(../images/card-business-640.jpg); }
+  .card-img--corporate  { background-image: url(../images/card-corporate-640.jpg); }
+  .card-img--realestate { background-image: url(../images/card-realestate-640.jpg); }
+  .txn-logo--indaba     { background-image: url(../images/logo-indaba-640.png); }
+  .txn-logo--naboso     { background-image: url(../images/logo-naboso-640.png); }
+  .txn-logo--morganstanley { background-image: url(../images/logo-morganstanley-640.jpg); }
+}
+
+@media (max-width: 767px) {
+  .hero-slide--1        { background-image: url(../images/hero-home-640.jpg); }
+  .hero-slide--2        { background-image: url(../images/hero-home-2-640.jpg); }
+  .page-hero--about     { background-image: url(../images/hero-about-640.jpg); }
+  .page-hero--litigation{ background-image: url(../images/card-business-640.jpg); }
+  .page-hero--realestate{ background-image: url(../images/hero-realestate-640.jpg); }
+  .page-hero--corporate { background-image: url(../images/hero-corporate-640.jpg); }
+  .card-img--business   { background-image: url(../images/card-business-640.jpg); }
+  .card-img--corporate  { background-image: url(../images/card-corporate-640.jpg); }
+  .card-img--realestate { background-image: url(../images/card-realestate-640.jpg); }
+}
+
+/* --------------------------------------------------------------------------
+   17. Motion preferences
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  /* No background rotation when the visitor asks for reduced motion. */
+  .hero-slides .hero-slide:not(.is-active) { display: none; }
+
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

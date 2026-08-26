@@ -1,0 +1,14 @@
+{
+  "name": "Paul Rubell, Attorney At Law, P.C.",
+  "short_name": "Paul Rubell",
+  "description": "A boutique law firm that practices at the intersection of business and technology.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0075bb",
+  "icons": [
+    { "src": "/images/og-image-200.png", "sizes": "200x200", "type": "image/png", "purpose": "any" },
+    { "src": "/images/apple-touch-icon-57.png", "sizes": "57x57", "type": "image/png" }
+  ]
+}

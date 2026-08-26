@@ -1,0 +1,795 @@
+#!/usr/bin/env node
+/**
+ * Renders the seven static pages in /public from the shared header/footer
+ * partials below. This is a convenience for keeping the chrome in sync — the
+ * committed HTML in /public is the deployable artifact and Vercel runs no
+ * build step. Run with:  node tools/render.mjs
+ */
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const OUT = join(ROOT, 'public');
+
+const SITE = 'https://www.paulrubell.com';
+const TITLE = 'Paul Rubell, Attorney At Law, P.C.';
+const DESC = 'A boutique law firm that practices at the intersection of business and technology .';
+const KEYWORDS =
+  'paul rubell, privacy law, business law, corporate law, long island law, attorney at law, ' +
+  'tech law, meltzer lippe, abrams fensterman, employment law, boutique law firm, attorney, legal, ' +
+  'business, real estate, real estate law, 1031, technology, tech, shareholder, dispute, ' +
+  'stockholder, stock, securities, agreement';
+const TEL_HREF = 'tel:516-946-1706';           // corrected from the live site's 515 typo
+const OG_IMAGE = `${SITE}/images/og-image-200.png`;
+
+/* ---------------------------------------------------------------- icons -- */
+const ICON_MAIL = (cls = 'icon-mail') => `<svg class="${cls}" viewBox="0 0 512 512" role="img" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="32" d="M48 112h416v288H48z"/><path fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="square" d="m64 128 192 144L448 128"/></svg>`;
+
+const ICON_LINKEDIN = `<svg viewBox="0 0 448 512" role="img" aria-hidden="true" focusable="false"><path fill="currentColor" d="M100.3 480H7.4V180.9h92.9V480zM53.8 140.1C24.1 140.1 0 115.5 0 85.8 0 56.1 24.1 32 53.8 32s53.8 24.1 53.8 53.8c0 29.7-24.1 54.3-53.8 54.3zM447.9 480h-92.7V334.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V480h-92.8V180.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V480z"/></svg>`;
+
+const ICON_PHONE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" role="img" aria-hidden="true" focusable="false"><path d="M25.3,44.8C35.7,55.3,44.2,56,46.6,56c3.9,0,9.4-5,9.4-6.3v-2.5c0-0.6-0.4-1.1-1-1.3l-10-3.2c-0.5-0.2-1,0-1.4,0.3L40,46.8 c-0.4,0.4-1.1,0.5-1.6,0.2c-1.5-0.9-4.8-2.9-8.6-6.8c-3.8-3.8-5.9-7.1-6.8-8.6c-0.3-0.5-0.2-1.2,0.2-1.6l3.7-3.7 c0.4-0.4,0.5-0.9,0.3-1.4l-3.2-10c-0.2-0.6-0.7-1-1.3-1h-2.5C19,14.1,14,19.7,14,23.5C14,25.8,14.8,34.3,25.3,44.8L25.3,44.8z"/></svg>`;
+
+const ICON_CHEVRON = `<span class="nav-chevron" aria-hidden="true"><svg viewBox="0 0 320 512" focusable="false"><path fill="currentColor" d="M143 352.3 7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"/></svg></span>`;
+
+/* ------------------------------------------------------------ structured -- */
+const LEGAL_SERVICE = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  '@id': `${SITE}/#organization`,
+  name: 'Paul Rubell, Attorney At Law, P.C.',
+  alternateName: 'Paul Rubell',
+  description: DESC.trim(),
+  url: SITE,
+  telephone: '+1-516-946-1706',
+  email: 'paul@paulrubell.com',
+  image: OG_IMAGE,
+  logo: OG_IMAGE,
+  priceRange: '$$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '48 South Service Road, Suite 300',
+    addressLocality: 'Melville',
+    addressRegion: 'NY',
+    postalCode: '11747',
+    addressCountry: 'US',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: 40.771, longitude: -73.412 },
+  areaServed: [
+    { '@type': 'State', name: 'New York' },
+    { '@type': 'Country', name: 'United States' },
+  ],
+  sameAs: ['https://www.linkedin.com/in/paulrubell/'],
+  founder: { '@type': 'Person', name: 'Paul Rubell', jobTitle: 'Attorney' },
+  knowsAbout: [
+    'Business law', 'Corporate law', 'Real estate law', 'Technology law',
+    'Privacy law', 'Mergers and acquisitions', 'Venture capital', 'Securities offerings',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Practice Areas',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Business Law', url: `${SITE}/Litigation` } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Corporate Law', url: `${SITE}/corporate` } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Real Estate Law', url: `${SITE}/real-estate` } },
+    ],
+  },
+};
+
+const PERSON = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${SITE}/about#paul-rubell`,
+  name: 'Paul Rubell',
+  jobTitle: 'Attorney',
+  honorificSuffix: 'Esq.',
+  url: `${SITE}/about`,
+  image: OG_IMAGE,
+  email: 'paul@paulrubell.com',
+  telephone: '+1-516-946-1706',
+  worksFor: { '@id': `${SITE}/#organization` },
+  sameAs: ['https://www.linkedin.com/in/paulrubell/'],
+  knowsAbout: [
+    'Technology law', 'Privacy law', 'Business law', 'Corporate law',
+    'Real estate law', 'Cybersecurity', 'Blockchain',
+  ],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '48 South Service Road, Suite 300',
+    addressLocality: 'Melville',
+    addressRegion: 'NY',
+    postalCode: '11747',
+    addressCountry: 'US',
+  },
+};
+
+const breadcrumb = (name, path) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name, item: `${SITE}${path}` },
+  ],
+});
+
+/* ----------------------------------------------------------------- head -- */
+function head({ path, preload = [], jsonld = [] }) {
+  const canonical = `${SITE}${path}`;
+  const preloads = preload
+    .map(([sm, md, lg]) => `  <link rel="preload" as="image" href="/images/${sm}" media="(max-width: 767px)" fetchpriority="high">
+  <link rel="preload" as="image" href="/images/${md}" media="(min-width: 768px) and (max-width: 1024px)" fetchpriority="high">
+  <link rel="preload" as="image" href="/images/${lg}" media="(min-width: 1025px)" fetchpriority="high">`)
+    .join('\n');
+  const blocks = jsonld
+    .map((o) => `  <script type="application/ld+json">${JSON.stringify(o)}</script>`)
+    .join('\n');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
+  <title>${TITLE}</title>
+  <meta name="description" content="${DESC}">
+  <meta name="keywords" content="${KEYWORDS}">
+  <link rel="canonical" href="${canonical}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Paul Rubell, Attorney At Law, P.C.">
+  <meta name="theme-color" content="#0075bb">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Paul Rubell">
+  <meta name="format-detection" content="telephone=no">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="${TITLE}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:title" content="${TITLE}">
+  <meta property="og:description" content="${DESC}">
+  <meta property="og:image" content="${OG_IMAGE}">
+  <meta property="og:image:width" content="200">
+  <meta property="og:image:height" content="200">
+  <meta property="og:image:alt" content="Paul Rubell, Attorney At Law, P.C.">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="${TITLE}">
+  <meta name="twitter:description" content="${DESC}">
+  <meta name="twitter:image" content="${OG_IMAGE}">
+
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon-57.png">
+
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/montserrat-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/opensans-latin.woff2" crossorigin>
+${preloads}
+  <link rel="stylesheet" href="/css/site.css">
+${blocks}
+</head>`;
+}
+
+/* --------------------------------------------------------------- header -- */
+const NAV_ITEMS = [
+  { label: 'About', href: '/about', key: 'about' },
+  {
+    label: 'Practice Areas', href: '/practiceareas', key: 'practiceareas',
+    sub: [
+      { label: 'Business', href: '/Litigation', key: 'Litigation' },
+      { label: 'Real Estate', href: '/real-estate', key: 'real-estate' },
+      { label: 'Corporate', href: '/corporate', key: 'corporate' },
+    ],
+  },
+  { label: 'Contact', href: '/contact', key: 'contact' },
+];
+
+const PA_CHILDREN = ['Litigation', 'real-estate', 'corporate'];
+
+function navList(current, { id, cls, noToggle }) {
+  const items = NAV_ITEMS.map((it) => {
+    const isCurrent = it.key === current || (it.key === 'practiceareas' && PA_CHILDREN.includes(current));
+    const liCls = [it.sub ? 'has-sub' : '', isCurrent ? 'is-current' : ''].filter(Boolean).join(' ');
+    if (!it.sub) {
+      return `        <li${liCls ? ` class="${liCls}"` : ''}><a href="${it.href}"${isCurrent ? ' aria-current="page"' : ''}><span class="nav-item-text">${it.label}</span></a></li>`;
+    }
+    const subs = it.sub
+      .map((s) => `            <li${s.key === current ? ' class="is-current"' : ''}><a href="${s.href}"${s.key === current ? ' aria-current="page"' : ''}><span class="nav-item-text">${s.label}</span></a></li>`)
+      .join('\n');
+    return `        <li class="${liCls}">
+          <a href="${it.href}"${noToggle ? '' : ' aria-expanded="false" aria-controls="' + id + '-sub"'}${isCurrent ? ' aria-current="page"' : ''}><span class="nav-item-text">${it.label}${ICON_CHEVRON}</span></a>
+          <ul class="subnav" id="${id}-sub">
+${subs}
+          </ul>
+        </li>`;
+  }).join('\n');
+  return `      <ul>
+${items}
+      </ul>`;
+}
+
+function mobileHeader() {
+  return `  <div class="m-header">
+    <div class="bar">
+      <div class="slot-left"></div>
+      <div class="slot-mid">
+        <a class="wordmark" href="/">
+          <img src="/images/paul-rubell-logo.png" width="1516" height="292" alt="Paul Rubell &mdash; Attorney At Law, P.C.">
+        </a>
+      </div>
+      <div class="slot-right">
+        <a class="phone" href="${TEL_HREF}" aria-label="Call 516-946-1706">${ICON_PHONE}</a>
+      </div>
+    </div>
+  </div>
+  <button class="hamburger" type="button" aria-label="Menu" aria-controls="mobile-drawer" aria-expanded="false">
+    <span class="slice"></span><span class="slice"></span><span class="slice"></span>
+  </button>`;
+}
+
+function drawer(current) {
+  return `<div class="drawer" id="mobile-drawer">
+  <nav aria-label="Mobile">
+${navList(current, { id: 'drawer', cls: '', noToggle: true })}
+  </nav>
+  <div class="drawer-foot">
+    <div class="foot-line"><p class="label">Get in touch</p></div>
+    <div class="foot-line">
+      <p>516-946-1706</p>
+      <p>Paul@paulrubell.com</p>
+    </div>
+    <p class="icons">
+      <a href="mailto:paul@paulrubell.com" aria-label="Email Paul Rubell">${ICON_MAIL('')}</a>
+      <a href="https://www.linkedin.com/in/paulrubell/" aria-label="Paul Rubell on LinkedIn" target="_blank" rel="noopener">${ICON_LINKEDIN}</a>
+    </p>
+  </div>
+</div>
+<div class="drawer-overlay" hidden-aria></div>`;
+}
+
+/** Interior-page header: dark utility strip + solid blue nav band. */
+function headerInner(current) {
+  return `<header class="site-header">
+${mobileHeader()}
+  <div class="row topbar">
+    <div class="wrap">
+      <div class="col c6 social">
+        <a href="mailto:paul@paulrubell.com" aria-label="Email Paul Rubell">${ICON_MAIL()}</a>
+      </div>
+      <div class="col c6">
+        <p class="contact-line"><span>paul@paulrubell</span><a href="mailto:Paul@paulrubell.com">.com</a><span> <span>/ 516.946.1706</span></span></p>
+      </div>
+    </div>
+  </div>
+  <div class="row navrow">
+    <div class="wrap">
+      <div class="col c6 brand-col"></div>
+      <div class="col c6 nav-col">
+        <nav class="mainnav" aria-label="Primary">
+${navList(current, { id: 'main', cls: '' })}
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+${drawer(current)}`;
+}
+
+/** Home header: dark utility strip + white band with the badge and wordmark. */
+function headerHome() {
+  return `<header class="site-header">
+${mobileHeader()}
+  <div class="row topbar topbar--home">
+    <div class="wrap">
+      <div class="col c6 social">
+        <a href="mailto:paul@paulrubell.com" aria-label="Email Paul Rubell">${ICON_MAIL()}</a>
+      </div>
+      <div class="col c6 contact-col">
+        <p class="contact-line"><a href="mailto:Paul@paulrubell.com">Paul@paulrubell.com</a><span> <span>/ 516-946-1706</span></span></p>
+      </div>
+    </div>
+  </div>
+  <div class="row navrow--home">
+    <div class="wrap">
+      <div class="col c6">
+        <div class="row brandbar">
+          <div class="wrap">
+            <div class="col c2 badge-col">
+              <span class="badge-link">
+                <img class="badge-img" src="/images/superlawyers-badge.png" width="344" height="286" alt="Rated by Super Lawyers &mdash; Paul Rubell, SuperLawyers.com">
+              </span>
+            </div>
+            <div class="col c10 name-col">
+              <p class="brand-name">Paul Rubell</p>
+              <p class="brand-sub">Attorney At Law, P.C.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col c6">
+        <nav class="mainnav mainnav--home" aria-label="Primary">
+${navList('home', { id: 'main', cls: '' })}
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+${drawer('home')}`;
+}
+
+/* --------------------------------------------------------------- footer -- */
+function footer() {
+  return `<footer class="site-footer">
+  <div class="row footer-main">
+    <div class="wrap">
+      <div class="col c6 footer-brand">
+        <div class="brand-block">
+          <h2>Paul Rubell</h2>
+          <p>Attorney At Law, P.C.</p>
+        </div>
+        <p class="footer-badge">
+          <img src="/images/superlawyers-badge.png" width="344" height="286" alt="Rated by Super Lawyers &mdash; Paul Rubell, SuperLawyers.com" loading="lazy">
+        </p>
+      </div>
+      <div class="col c6 footer-contact">
+        <div class="contact-head"><h2>Contact</h2></div>
+        <div class="footer-address">
+          <p>48 South Service Road</p>
+          <p>Suite 300</p>
+          <p>Melville, NY 11747</p>
+        </div>
+        <div class="footer-links">
+          <p><a href="${TEL_HREF}">516-946-1706</a></p>
+          <p><a class="mail" href="mailto:paul@paulrubell.com">paul@paulrubell.com</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row footer-legal">
+    <div class="wrap">
+      <div class="col c12">
+        <div class="copyright">
+          <div>&copy; 2026&nbsp;</div>
+          <div><p>Powered by <a href="http://www.craic.in" target="_blank" rel="noopener">Craic.in</a></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>`;
+}
+
+const TAIL = `<script src="/js/site.js" defer></script>
+</body>
+</html>
+`;
+
+/* ------------------------------------------------------------- page: / -- */
+const CARDS = [
+  {
+    href: '/Litigation', title: 'Business Law',
+    text: 'Business disputes are part of every business. We help you protect your best interests.',
+    img: 'card-business', widths: [440, 640, 1000, 1440],
+  },
+  {
+    href: '/corporate', title: 'Corporate Law',
+    text: 'We help create business entities, such as corporations, partnerships and joint ventures.',
+    img: 'card-corporate', widths: [440, 640, 1000],
+  },
+  {
+    href: '/real-estate', title: 'Real Estate Law',
+    text: 'Draw upon our full complement of services to safeguard and manage your assets.',
+    img: 'card-realestate', widths: [440, 640, 1000],
+  },
+];
+
+const TXNS = [
+  {
+    logo: 'logo-naboso', ext: 'png', logoWidths: [640, 925], alt: 'Naboso',
+    title: 'Venture Capital Investment', titleInk: 'black',
+    body: `<p><span>Naboso, a&nbsp;</span><strong>manufacturer of proprietary&nbsp;</strong><span>footwear products based on the first-ever small nerve proprioceptive material commercially available and designed for the purpose of improving posture and enhancing movement, received a $3,000,000 Venture Capital Investment from Protea Japan.</span></p>
+              <p class="attrib"><strong>Paul Rubell, Attorney at Law P.C. represented Naboso.</strong></p>`,
+  },
+  {
+    logo: 'logo-indaba', ext: 'png', logoWidths: [640, 1026], alt: 'Indaba Renewable Fuels',
+    title: 'Venture Capital Investment', titleInk: 'black',
+    body: `<p><span>Indaba Renewable Fuels, developers of a new refinery for the production of high-grade, ultra-low sulfur drop-in renewable jet fuel, received a Pre-Development Capital Investment&nbsp;</span><strong>of $750,000.&nbsp;</strong><span>Paul Rubell, Attorney at Law P.C. represented the&nbsp;</span><strong>investors&#8203;.</strong></p>
+              <p class="attrib"><strong>Paul Rubell, Attorney at Law P.C. represented the Lead Investor&#8203;.</strong></p>`,
+  },
+  {
+    logo: 'logo-cyberus', ext: 'png', logoWidths: [594], alt: 'Cyberus Labs',
+    title: 'Seed Investment Round', titleInk: '333',
+    body: `<p><span>Cyberus Labs, proprietor of Cyberus Key, a one-touch audio user-authentication system that eliminates the use of passwords and provides the highest level of protection, received a $2,000,000 Capital Infusion.</span></p>
+              <p class="attrib"><strong>Paul Rubell, Attorney at Law P.C. represented the Lead Investor&#8203;.</strong></p>`,
+  },
+  {
+    logo: 'logo-blueorb', ext: 'jpeg', logoWidths: [200], alt: 'Blue Orb',
+    title: 'Venture Capital Investment', titleInk: 'black', innerRule: true,
+    body: `<p><span>Blue Orb, a renewables development platform, received a Capital Investment of $1,000,000.</span></p>
+              <p class="attrib"><strong>Paul Rubell, Attorney at Law P.C. represented the Lead Investor&#8203;.</strong></p>`,
+  },
+  {
+    logo: 'logo-morganstanley', ext: 'jpg', logoWidths: [640, 854], alt: 'Morgan Stanley',
+    title: 'Line of Credit', titleInk: 'black',
+    body: `<p><span>International Art Trading, LLC received</span> <strong>$25,000,000 line of credit.</strong></p>
+              <p class="attrib"><strong>Paul Rubell, Attorney at Law P.C.&nbsp;represented the Borrower.</strong></p>`,
+  },
+];
+
+function srcset(base, widths, ext) {
+  return widths.map((w) => `/images/${base}-${w}.${ext} ${w}w`).join(', ');
+}
+
+function homePage() {
+  const cards = CARDS.map((c) => `            <div class="gallery-col">
+              <div class="gallery-thumb">
+                <a class="gallery-card" href="${c.href}">
+                  <span class="card-img card-img--${c.img.replace('card-', '')}" role="img" aria-label="${c.title}"></span>
+                  <span class="caption">
+                    <span class="caption-title">${c.title}</span>
+                    <span class="caption-text"><br><span class="caption-copy">${c.text}</span></span>
+                  </span>
+                </a>
+              </div>
+            </div>`).join('\n');
+
+  const txns = TXNS.map((t, i) => {
+    // The live page puts separators 1-3 at full width but tucks the fourth
+    // one inside the Blue Orb text column. Reproduced as-is.
+    const rule = i === 0 || TXNS[i - 1].innerRule ? '' : `          <div class="txn-rule"><hr></div>\n`;
+    const inner = t.innerRule ? `\n                <div class="txn-rule"><hr></div>` : '';
+    return `${rule}          <div class="txn${t.innerRule ? ' txn--flush' : ''}">
+            <div class="txn-logo txn-logo--${t.logo.replace('logo-', '')}" role="img" aria-label="${t.alt}"></div>
+            <div class="txn-body">
+              <h3${t.titleInk === '333' ? ' class="ink-333"' : ''}>${t.title}</h3>
+              <div class="txn-copy">
+              ${t.body}
+              </div>${inner}
+            </div>
+          </div>`;
+  }).join('\n');
+
+  return `${head({
+    path: '/',
+    preload: [['hero-home-640.jpg', 'hero-home-1024.jpg', 'hero-home-1920.jpg']],
+    jsonld: [LEGAL_SERVICE, { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE}/#website`, url: SITE, name: TITLE, publisher: { '@id': `${SITE}/#organization` }, inLanguage: 'en-US' }],
+  })}
+<body class="page-home">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="site">
+${headerHome()}
+
+  <main id="main">
+
+    <section class="row hero" aria-label="Introduction">
+      <div class="hero-slides" aria-hidden="true">
+        <div class="hero-slide hero-slide--1 is-active"></div>
+        <div class="hero-slide hero-slide--2"></div>
+      </div>
+      <div class="wrap">
+        <div class="col c12">
+          <h1>Forward Looking</h1>
+          <h2>Business Law</h2>
+          <p class="tagline"><span>A boutique business law firm that practices at the intersection of business and technology&nbsp;</span>.&nbsp;</p>
+          <a class="btn-call" href="${TEL_HREF}"><span class="text">LET'S TALK</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="row row--full welcome" aria-labelledby="welcome-heading">
+      <div class="wrap">
+        <div class="col c12">
+          <div class="lede">
+            <h2 id="welcome-heading"><a href="/about"><strong>Paul Rubell</strong></a> <strong>welcomes you to a</strong> <strong>law practice like no other.</strong></h2>
+          </div>
+          <div class="divider"><hr></div>
+          <div class="kicker"><p><span>A boutique business</span> <span>law firm</span></p></div>
+          <div class="body">
+            <p>Paul provides legal counsel, business advice and strategic planning to established and emerging companies, entrepreneurs and investors. His practice areas include mergers and acquisitions; private equity; venture capital; private and public securities offerings; and governance.&nbsp;</p>
+            <p>Paul&rsquo;s extensive experience includes partnership agreements, shareholder disputes and litigation strategy, commercial real estate acquisition and financing. In addition, he has extensive experience handling real estate acquisitions, divestitures and financing, and designing and structuring complex transactions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row row--full practice" aria-labelledby="practice-heading">
+      <div class="wrap">
+        <div class="col c12">
+          <h2 id="practice-heading"><strong>Practice Areas</strong></h2>
+          <div class="gallery">
+            <div class="gallery-inner">
+              <div class="gallery-row">
+${cards}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row row--full transactions" aria-labelledby="transactions-heading">
+      <div class="wrap">
+        <div class="col c5 intro-col">
+          <h2 id="transactions-heading"><strong>Highlighted Transactions</strong></h2>
+          <div class="divider divider--left"><hr></div>
+          <div class="intro-body">
+            <p>Attorney Paul Rubell has a distinguished track record of facilitating complex investment transactions across diverse industries.</p>
+            <p>His expertise encompasses venture capital, renewable energy, cybersecurity, and technology sectors, providing clients with comprehensive legal counsel and strategic business advice.</p>
+          </div>
+        </div>
+        <div class="col c7 list-col">
+${txns}
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+${footer()}
+</div>
+${TAIL}`;
+}
+
+/* --------------------------------------------------------- interior page -- */
+function interiorPage({ path, current, preload, hero, jsonld, main }) {
+  return `${head({ path, preload: preload || [], jsonld })}
+<body class="page-inner">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="site">
+${headerInner(current)}
+
+  <main id="main">
+${hero || ''}
+${main}
+  </main>
+
+${footer()}
+</div>
+${TAIL}`;
+}
+
+const heroBand = (mod) =>
+  `    <div class="page-hero ${mod.split(' ').map((m) => 'page-hero--' + m).join(' ')}" role="presentation"></div>`;
+
+/* ------------------------------------------------------------ page bodies */
+function aboutPage() {
+  return interiorPage({
+    path: '/about',
+    current: 'about',
+    preload: [['hero-about-640.jpg', 'hero-about-1024.jpg', 'hero-about-1920.jpg']],
+    jsonld: [LEGAL_SERVICE, PERSON, breadcrumb('About', '/about')],
+    hero: heroBand('about parallax'),
+    main: `    <section class="row section" aria-labelledby="about-heading">
+      <div class="wrap">
+        <div class="col c12">
+          <h1 class="page-title page-title--flush" id="about-heading">About Paul Rubell, Esq.</h1>
+          <div class="divider divider--left"><hr></div>
+          <div class="prose prose--gap23 prose--lines">
+            <p>Paul provides legal counsel, business advice and strategic planning to established and emerging companies, entrepreneurs and investors. His practice areas include mergers and acquisitions; private equity; venture capital; private and public securities offerings; and governance. Paul&rsquo;s extensive experience includes partnership agreements, shareholder disputes and litigation strategy, commercial real estate acquisition and financing. In addition, he has extensive experience handling real estate acquisitions, divestitures and financing, and designing and structuring complex transactions.</p>
+            <p class="blank"><br></p>
+            <p>Paul is a national leader in the fields of technology and privacy law. He advises clients about domestic and international privacy laws involving healthcare, financial services, education and other verticals as well as disruptive technologies and innovation such as blockchain, augmented reality, cybersecurity, encryption, 3D printing, robotics and space exploration.&nbsp;</p>
+            <p class="blank"><br></p>
+            <p>Paul&rsquo;s writings have been published frequently in the New York Law Journal and other important periodicals. He has been interviewed about legal topics by CBS-TV, ABC-TV, National Public Radio, The New York Times, Associated Press, Long Island Business News, Newsday, Law360, and the national media. Paul lectures frequently to boards of directors, trade associations and not-for-profits.</p>
+            <p class="blank"><br></p>
+            <p class="blank"><br></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row section--tail" aria-labelledby="mission-heading">
+      <div class="wrap">
+        <div class="col c12">
+          <div class="divider divider--wide divider--dotted"><hr></div>
+          <h2 class="mission-title" id="mission-heading">Mission</h2>
+          <div class="prose prose--gap8 prose--lines">
+            <p>Our mission is to provide each and every client with skilled legal advice in a timely and efficient manner. We handle every case with accountability and responsiveness and are dedicated to focusing on the legal aspects of your case, so that you can focus on your personal success.&nbsp;</p>
+            <p class="blank"><br></p>
+            <p>Our mission is based on the values we hold true: <i>integrity, service and excellence</i>.</p>
+          </div>
+        </div>
+      </div>
+    </section>`,
+  });
+}
+
+function practiceAreasPage() {
+  const items = [
+    {
+      href: '/real-estate', name: 'Real Estate', img: 'card-realestate', widths: [440, 640, 1000],
+      text: 'Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, and more.',
+      stray: 'List Item  3',
+    },
+    {
+      href: '/corporate', name: 'Corporate', img: 'card-corporate', widths: [440, 640, 1000],
+      text: 'We represent both foreign and domestic companies to ensure the legal passage of goods, services, capital and more across borders.',
+      stray: 'List Item  4',
+    },
+  ].map((it) => `            <li>
+              <a class="biglink" href="${it.href}">
+                <span class="list-image list-image--${it.img.replace('card-', '')}" role="img" aria-label="${it.name}"></span>
+                <span class="list-text">
+                  <span class="item-name">${it.name}</span>
+                  <span class="item-text">${it.text}</span>
+                </span>
+                <span class="link">
+                  <span class="button-text">Learn More</span>
+                  <span class="item-name">${it.stray}</span>
+                </span>
+              </a>
+            </li>`).join('\n');
+
+  return interiorPage({
+    path: '/practiceareas',
+    current: 'practiceareas',
+    jsonld: [LEGAL_SERVICE, breadcrumb('Practice Areas', '/practiceareas')],
+    main: `    <section class="row section--pa-intro" aria-labelledby="pa-heading">
+      <div class="wrap">
+        <div class="col c12 gutter-30">
+          <h1 class="page-title page-title--center" id="pa-heading">Practice Areas</h1>
+          <div class="divider divider--thick"><hr></div>
+          <div class="prose prose--15">
+            <p>Rubell Law provides legal counsel, business advice and strategic planning to established and emerging companies, entrepreneurs and investors. His practice areas include mergers and acquisitions; private equity; venture capital; private and public securities offerings; and governance. Paul&rsquo;s extensive experience includes partnership agreements, shareholder disputes and litigation strategy, commercial real estate acquisition and financing. In addition, he has extensive experience handling real estate acquisitions, divestitures and financing, and designing and structuring complex transactions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row section--pa-list" aria-label="List of Services">
+      <div class="wrap">
+        <div class="col c12">
+          <ul class="services">
+${items}
+          </ul>
+        </div>
+      </div>
+    </section>`,
+  });
+}
+
+function litigationPage() {
+  return interiorPage({
+    path: '/Litigation',
+    current: 'Litigation',
+    preload: [['card-business-640.jpg', 'card-business-1000.jpg', 'card-business-1440.jpg']],
+    jsonld: [
+      LEGAL_SERVICE,
+      breadcrumb('Business', '/Litigation'),
+      { '@context': 'https://schema.org', '@type': 'Service', name: 'Business Law', serviceType: 'Business Law', url: `${SITE}/Litigation`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
+    ],
+    hero: `    <div class="page-hero page-hero--litigation" role="presentation"></div>`,
+    main: `    <section class="row section--practice" aria-labelledby="biz-heading">
+      <div class="wrap">
+        <div class="col c12 gutter-30">
+          <h1 class="page-title" id="biz-heading">Business Law</h1>
+          <div class="divider divider--left divider--thick"><hr></div>
+          <div class="prose prose--16">
+            <p>We apply forward-thinking ideas and solutions to the most challenging legal issues you face, and approach each case with passion and commitment. From the first steps of the litigation process and right through to the end, we&rsquo;ll handle everything you need to be in your best shape at trial. We know how complicated litigation can be. From pleadings, affidavits, examinations, motions, mediation, undertakings, refusals, pretrial, and finally, trial.</p>
+            <p><b class="subhead">General Corporate Counsel</b><br>We structure, negotiate, draft and review corporate documents on behalf of clients big and small, foreign and domestic, growing or restructuring, and in nearly all jurisdictions.  For many companies and corporations we are an invaluable addition to the general counsel team contributing to precise, reliable corporate documents and offering ongoing business counsel to your in-house legal team.</p>
+            <p><b class="subhead">Conventional Financing</b><br>We represent institutional lenders and borrowers in connection with short and long term financing for business enterprises; including mortgage financing.</p>
+            <p><b class="subhead">Venture Capital Financing</b><br>We represent public and private companies as well as venture capital entities in connection with debt and equity offerings, warrants, and structuring joint ventures both domestically and abroad.</p>
+            <p><b class="subhead">M &amp; A Transactions</b><br>The majority of our work is in complex transactions, disclosure, compliance, governance and M&amp;A, but in everything we do, we endeavor to support clients in a manner that allows them to focus on the growth of their business and know they are on sound legal footing, well-positioned for growth, and able to act swiftly to capitalize on the next opportunity.</p>
+            <p><b class="subhead">Business Formation</b><br>We provide counsel on traditional business transactions, the formation of new entities, basic corporate management responsibilities and unforeseen legal needs resulting from continued global growth.  We counsel clients in complying with increasingly fragmented government and agency regulations, in understanding and managing new legal developments, and in forecasting legal trends to formulate sound corporate policy and stay ahead of the regulatory curve.</p>
+          </div>
+        </div>
+      </div>
+    </section>`,
+  });
+}
+
+function realEstatePage() {
+  return interiorPage({
+    path: '/real-estate',
+    current: 'real-estate',
+    preload: [['hero-realestate-640.jpg', 'hero-realestate-1024.jpg', 'hero-realestate-1920.jpg']],
+    jsonld: [
+      LEGAL_SERVICE,
+      breadcrumb('Real Estate', '/real-estate'),
+      { '@context': 'https://schema.org', '@type': 'Service', name: 'Real Estate Law', serviceType: 'Real Estate Law', url: `${SITE}/real-estate`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
+    ],
+    hero: heroBand('realestate'),
+    main: `    <section class="row section--practice" aria-labelledby="re-heading">
+      <div class="wrap">
+        <div class="col c12 gutter-30">
+          <h1 class="page-title" id="re-heading">Real Estate Law</h1>
+          <div class="divider divider--left divider--thick"><hr></div>
+          <div class="prose prose--16">
+            <p>Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, financing, land use planning and more. We take a proactive approach to developing and implementing solutions to your distinct challenges to help you manage your real estate assets.</p>
+          </div>
+        </div>
+      </div>
+    </section>`,
+  });
+}
+
+function corporatePage() {
+  return interiorPage({
+    path: '/corporate',
+    current: 'corporate',
+    preload: [['hero-corporate-640.jpg', 'hero-corporate-1024.jpg', 'hero-corporate-1920.jpg']],
+    jsonld: [
+      LEGAL_SERVICE,
+      breadcrumb('Corporate', '/corporate'),
+      { '@context': 'https://schema.org', '@type': 'Service', name: 'Corporate Law', serviceType: 'Corporate Law', url: `${SITE}/corporate`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
+    ],
+    hero: heroBand('corporate'),
+    main: `    <section class="row section--practice" aria-labelledby="corp-heading">
+      <div class="wrap">
+        <div class="col c12 gutter-30">
+          <h1 class="page-title" id="corp-heading">Corporate Law</h1>
+          <div class="divider divider--left divider--thick"><hr></div>
+          <div class="prose prose--16">
+            <p>We help create business entities, such as corporations, partnerships and joint ventures. We also represent both foreign and domestic companies to ensure the legal passage of goods, services, capital and more across borders. Our clients include multinational companies as well as small businesses.</p>
+          </div>
+        </div>
+      </div>
+    </section>`,
+  });
+}
+
+function contactPage() {
+  return interiorPage({
+    path: '/contact',
+    current: 'contact',
+    jsonld: [
+      LEGAL_SERVICE,
+      breadcrumb('Contact', '/contact'),
+      { '@context': 'https://schema.org', '@type': 'ContactPage', url: `${SITE}/contact`, name: 'Contact', about: { '@id': `${SITE}/#organization` } },
+    ],
+    hero: `    <div class="contact-spacer"></div>`,
+    main: `    <section class="row section--contact-title" aria-labelledby="contact-heading">
+      <div class="wrap">
+        <div class="col c12">
+          <h1 class="page-title page-title--center page-title--flush" id="contact-heading">Contact</h1>
+          <div class="divider divider--thick"><hr></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="row section--contact-blocks" aria-label="Contact details">
+      <div class="wrap">
+        <div class="col c4 contact-block contact-block--phone">
+          <div class="cb-body">
+            <p><strong>Phone</strong><span>&#65279;</span></p>
+            <p><span>516.946.1706</span></p>
+          </div>
+        </div>
+        <div class="col c4 contact-block contact-block--address">
+          <div class="cb-body">
+            <p><strong>Address</strong></p>
+            <p><span>48 South Service Road</span></p>
+            <p><span>Suite 300</span></p>
+            <p><span>Melville, New York 11747</span></p>
+            <p><span><br></span></p>
+            <p><br></p>
+          </div>
+        </div>
+        <div class="col c4 contact-block contact-block--email">
+          <div class="cb-body">
+            <p><strong>Email</strong></p>
+            <p><span>paul@paulrubell.com</span></p>
+            <p><span><br></span></p>
+          </div>
+          <p class="contact-social">
+            <a href="mailto:paul@paulrubell.com" aria-label="Email Paul Rubell">${ICON_MAIL('')}</a>
+            <a href="https://www.linkedin.com/in/paulrubell/" aria-label="Paul Rubell on LinkedIn" target="_blank" rel="noopener">${ICON_LINKEDIN}</a>
+          </p>
+        </div>
+      </div>
+    </section>`,
+  });
+}
+
+/* ---------------------------------------------------------------- write -- */
+const PAGES = [
+  ['index.html', homePage()],
+  ['about.html', aboutPage()],
+  ['practiceareas.html', practiceAreasPage()],
+  ['Litigation.html', litigationPage()],
+  ['real-estate.html', realEstatePage()],
+  ['corporate.html', corporatePage()],
+  ['contact.html', contactPage()],
+];
+
+mkdirSync(OUT, { recursive: true });
+for (const [name, html] of PAGES) {
+  writeFileSync(join(OUT, name), html, 'utf8');
+  console.log('wrote public/' + name);
+}
