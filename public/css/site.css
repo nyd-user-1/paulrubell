@@ -1689,3 +1689,22 @@ button:focus-visible {
     padding: 24px 20px !important;
   }
 }
+
+/* --- follow-ups ----------------------------------------------------------
+   Mega-panel hover was --alt-bg (#f9f9f9), which is the practice-areas band
+   tint and too faint to register as a hover on white. Its own token now, so
+   darkening it here doesn't darken that band. */
+:root { --mega-hover: #e9ecf1; }
+.mainnav .has-mega > .subnav > li > a:hover,
+.mainnav .has-mega > .subnav > li > a:focus-visible { background: var(--mega-hover); }
+
+/* Taller interior hero band. The static background-position values below are
+   only used before the parallax script takes over on desktop. */
+.page-hero { height: 400px; }
+@media (max-width: 767px) { .page-hero { height: 220px; } }
+/* The darker hover tint drops --gray-body to 4.21:1, under AA, so the blurb
+   darkens with it. Lighthouse never sees this — it doesn't test hover states. */
+.mainnav .has-mega > .subnav > li > a:hover .sub-desc,
+.mainnav .has-mega > .subnav > li > a:focus-visible .sub-desc { color: var(--gray-333); }
+.mainnav .has-mega > .subnav > li > a:hover .nav-item-text,
+.mainnav .has-mega > .subnav > li > a:focus-visible .nav-item-text { color: #005c93; }

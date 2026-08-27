@@ -108,13 +108,18 @@
   var desktop = window.matchMedia('(min-width: 768px)');
   if (!desktop.matches) return;
 
+  /* Each hero frames its photograph differently — the chessboard sits high,
+     the tower sits low — so the drift rides on top of a per-page base offset
+     declared in the markup rather than every image being pinned to the top. */
+  var base = parseFloat(el.getAttribute('data-parallax-base')) || 0;
+
   var ticking = false;
   function place() {
     ticking = false;
     var r = el.getBoundingClientRect();
     var k = 200 / (window.innerHeight + r.height);
     var y = Math.min(0, Math.max(-100, k * (r.top + r.height) - 100));
-    el.style.backgroundPosition = '50% ' + y.toFixed(2) + 'px';
+    el.style.backgroundPosition = '50% ' + (base + y).toFixed(2) + 'px';
   }
   function onScroll() {
     if (ticking) return;

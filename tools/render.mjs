@@ -636,8 +636,15 @@ const CTA = (lead) => `
       </div>
     </section>`;
 
-const heroBand = (mod) =>
-  `    <div class="page-hero ${mod.split(' ').map((m) => 'page-hero--' + m).join(' ')}" role="presentation"></div>`;
+/* Vertical base offset per hero, in px, applied before the parallax drift.
+   Tuned against each photograph: 0 keeps the top of the frame. */
+const HERO_BASE = { about: 0, litigation: -60, realestate: -190, corporate: -90 };
+
+const heroBand = (mod) => {
+  const mods = mod.split(' ');
+  const base = HERO_BASE[mods[0]] || 0;
+  return `    <div class="page-hero ${mods.map((m) => 'page-hero--' + m).join(' ')}"${base ? ` data-parallax-base="${base}"` : ''} role="presentation"></div>`;
+};
 
 /* ------------------------------------------------------------ page bodies */
 function aboutPage() {
@@ -751,7 +758,7 @@ function businessLawPage() {
       breadcrumb('Business Law', '/business-law'),
       { '@context': 'https://schema.org', '@type': 'Service', name: 'Business Law', serviceType: 'Business Law', url: `${SITE}/business-law`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
     ],
-    hero: `    <div class="page-hero page-hero--litigation" role="presentation"></div>`,
+    hero: heroBand('litigation parallax'),
     main: `    <section class="row section--practice" aria-labelledby="biz-heading">
       <div class="wrap">
         <div class="col c12 gutter-30">
@@ -782,7 +789,7 @@ function realEstatePage() {
       breadcrumb('Real Estate', '/real-estate'),
       { '@context': 'https://schema.org', '@type': 'Service', name: 'Real Estate Law', serviceType: 'Real Estate Law', url: `${SITE}/real-estate`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
     ],
-    hero: heroBand('realestate'),
+    hero: heroBand('realestate parallax'),
     main: `    <section class="row section--practice" aria-labelledby="re-heading">
       <div class="wrap">
         <div class="col c12 gutter-30">
@@ -814,7 +821,7 @@ function corporatePage() {
       breadcrumb('Corporate', '/corporate'),
       { '@context': 'https://schema.org', '@type': 'Service', name: 'Corporate Law', serviceType: 'Corporate Law', url: `${SITE}/corporate`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
     ],
-    hero: heroBand('corporate'),
+    hero: heroBand('corporate parallax'),
     main: `    <section class="row section--practice" aria-labelledby="corp-heading">
       <div class="wrap">
         <div class="col c12 gutter-30">
