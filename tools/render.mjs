@@ -687,6 +687,8 @@ function practiceAreasPage() {
   return interiorPage({
     path: '/practiceareas',
     current: 'practiceareas',
+    preload: [['card-business-640.jpg', 'card-business-1000.jpg', 'card-business-1440.jpg']],
+    hero: heroBand('litigation parallax'),
     jsonld: [
       LEGAL_SERVICE,
       breadcrumb('Practice Areas', '/practiceareas'),

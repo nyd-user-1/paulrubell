@@ -38,7 +38,9 @@
 
   <link rel="preload" as="font" type="font/woff2" href="/fonts/montserrat-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/fonts/opensans-latin.woff2" crossorigin>
-
+  <link rel="preload" as="image" href="/images/card-business-640.jpg" media="(max-width: 767px)" fetchpriority="high">
+  <link rel="preload" as="image" href="/images/card-business-1000.jpg" media="(min-width: 768px) and (max-width: 1024px)" fetchpriority="high">
+  <link rel="preload" as="image" href="/images/card-business-1440.jpg" media="(min-width: 1025px)" fetchpriority="high">
   <link rel="stylesheet" href="/css/site.css?v=12695b7634">
   <script>(function(){var d=document.documentElement,s=d.style;
 if(!('maskImage' in s)&&!('webkitMaskImage' in s))return;
@@ -154,7 +156,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="drawer-overlay" hidden-aria></div>
 
   <main id="main">
-
+    <div class="page-hero reveal-plate page-hero--litigation page-hero--parallax" data-parallax-base="-60" role="presentation"></div>
     <div class="reveal-fx">
     <section class="row section--pa-intro" aria-labelledby="pa-heading">
       <div class="wrap">
