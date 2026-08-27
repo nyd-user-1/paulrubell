@@ -1742,3 +1742,15 @@ button:focus-visible {
     transition: none;
   }
 }
+
+/* --- brand lockup --------------------------------------------------------
+   The sub-line is set to the measured width of "Paul Rubell" (154.67px at
+   Montserrat 700/26px) so the two lines rule to the same edge. Open Sans 400
+   at 16px lands within 0.02px of it, so no tracking correction is needed —
+   the letter-spacing hook is here only so the pair can be retuned together if
+   either face or size changes. */
+.brand-sub,
+.footer-brand .brand-block p {
+  font-size: 16px;
+  letter-spacing: 0;
+}
