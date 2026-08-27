@@ -30,19 +30,7 @@ const META = {
   },
   '/practiceareas': {
     title: 'Practice Areas | Paul Rubell, Attorney At Law, P.C.',
-    desc: 'Business, corporate and real estate law for established and emerging companies, entrepreneurs and investors across New York and beyond.',
-  },
-  '/business-law': {
-    title: 'Business Law Attorney | Paul Rubell, Attorney At Law, P.C.',
-    desc: 'General corporate counsel, conventional and venture capital financing, M&A transactions and business formation for companies of every size, foreign and domestic.',
-  },
-  '/real-estate': {
-    title: 'Real Estate Law Attorney, Melville NY | Paul Rubell, Attorney At Law, P.C.',
-    desc: 'Commercial real estate counsel covering acquisition and disposition, financing, leasing, land use and 1031 exchanges across Long Island and the New York metropolitan area.',
-  },
-  '/corporate': {
-    title: 'Corporate Law Attorney | Paul Rubell, Attorney At Law, P.C.',
-    desc: 'Entity formation, governance, shareholder and operating agreements, and cross-border counsel for multinational companies and small businesses alike.',
+    desc: 'Business, corporate and real estate law for established and emerging companies, entrepreneurs and investors across New York and beyond. General corporate counsel, financing, M&A, entity formation, governance, leasing and land use.',
   },
   '/contact': {
     title: 'Contact | Paul Rubell, Attorney At Law, P.C. — Melville, New York',
@@ -133,9 +121,9 @@ const LEGAL_SERVICE = {
     '@type': 'OfferCatalog',
     name: 'Practice Areas',
     itemListElement: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Business Law', url: `${SITE}/business-law` } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Corporate Law', url: `${SITE}/corporate` } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Real Estate Law', url: `${SITE}/real-estate` } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Business Law', url: `${SITE}/practiceareas#business-law` } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Corporate Law', url: `${SITE}/practiceareas#corporate-law` } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Real Estate Law', url: `${SITE}/practiceareas#real-estate-law` } },
     ],
   },
 };
@@ -243,15 +231,15 @@ const NAV_ITEMS = [
     mega: true,
     sub: [
       {
-        label: 'Business Law', href: '/business-law', key: 'business-law',
+        label: 'Business Law', href: '/practiceareas#business-law', key: 'business-law',
         desc: 'General corporate counsel, financing, M&amp;A and business formation.',
       },
       {
-        label: 'Real Estate Law', href: '/real-estate', key: 'real-estate',
+        label: 'Real Estate Law', href: '/practiceareas#real-estate-law', key: 'real-estate',
         desc: 'Acquisition and disposition, leasing, land use and 1031 exchanges.',
       },
       {
-        label: 'Corporate Law', href: '/corporate', key: 'corporate',
+        label: 'Corporate Law', href: '/practiceareas#corporate-law', key: 'corporate',
         desc: 'Entity formation, governance and shareholder agreements.',
       },
     ],
@@ -421,17 +409,17 @@ const TAIL = `<script src="${JS_SRC}" defer></script>
 /* ------------------------------------------------------------- page: / -- */
 const CARDS = [
   {
-    href: '/business-law', title: 'Business Law',
+    href: '/practiceareas#business-law', title: 'Business Law',
     text: 'Business disputes are part of every business. We help you protect your best interests.',
     img: 'card-business', widths: [440, 640, 1000, 1440],
   },
   {
-    href: '/corporate', title: 'Corporate Law',
+    href: '/practiceareas#corporate-law', title: 'Corporate Law',
     text: 'We help create business entities, such as corporations, partnerships and joint ventures.',
     img: 'card-corporate', widths: [440, 640, 1000],
   },
   {
-    href: '/real-estate', title: 'Real Estate Law',
+    href: '/practiceareas#real-estate-law', title: 'Real Estate Law',
     text: 'Draw upon our full complement of services to safeguard and manage your assets.',
     img: 'card-realestate', widths: [440, 640, 1000],
   },
@@ -626,7 +614,7 @@ const CTA = (lead) => `
     <section class="row section--cta" aria-labelledby="cta-heading">
       <div class="wrap">
         <div class="col c12">
-          <h2 class="cta-title" id="cta-heading">${lead}</h2>
+          <h3 class="cta-title" id="cta-heading">${lead}</h3>
           <p class="cta-copy">Write or call to discuss your matter directly with Paul Rubell &mdash; no intake queue, no gatekeeping.</p>
           <p class="cta-actions">
             <a class="btn btn--primary" href="${MAIL_HREF}">Email</a>
@@ -696,39 +684,19 @@ ${CTA('Ready to talk it through?')}`,
 }
 
 function practiceAreasPage() {
-  const items = [
-    {
-      href: '/business-law', name: 'Business Law', img: 'card-business', widths: [440, 640, 1000],
-      text: 'General corporate counsel, financing, M&A transactions and business formation for clients big and small, foreign and domestic.',
-      stray: '',
-    },
-    {
-      href: '/real-estate', name: 'Real Estate Law', img: 'card-realestate', widths: [440, 640, 1000],
-      text: 'Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, and more.',
-      stray: 'List Item  3',
-    },
-    {
-      href: '/corporate', name: 'Corporate Law', img: 'card-corporate', widths: [440, 640, 1000],
-      text: 'We represent both foreign and domestic companies to ensure the legal passage of goods, services, capital and more across borders.',
-      stray: 'List Item  4',
-    },
-  ].map((it) => `            <li>
-              <a class="biglink" href="${it.href}">
-                <span class="list-image list-image--${it.img.replace('card-', '')}" role="img" aria-label="${it.name}"></span>
-                <span class="list-text">
-                  <span class="item-name">${it.name}</span>
-                  <span class="item-text">${it.text}</span>
-                </span>
-                <span class="link">
-                  <span class="button-text">Learn More</span>
-                </span>
-              </a>
-            </li>`).join('\n');
-
   return interiorPage({
     path: '/practiceareas',
     current: 'practiceareas',
-    jsonld: [LEGAL_SERVICE, breadcrumb('Practice Areas', '/practiceareas')],
+    jsonld: [
+      LEGAL_SERVICE,
+      breadcrumb('Practice Areas', '/practiceareas'),
+      ...['Business Law', 'Corporate Law', 'Real Estate Law'].map((n, i) => ({
+        '@context': 'https://schema.org', '@type': 'Service', name: n, serviceType: n,
+        url: `${SITE}/practiceareas#${['business-law', 'corporate-law', 'real-estate-law'][i]}`,
+        provider: { '@id': `${SITE}/#organization` },
+        areaServed: { '@type': 'State', name: 'New York' },
+      })),
+    ],
     main: `    <section class="row section--pa-intro" aria-labelledby="pa-heading">
       <div class="wrap">
         <div class="col c12 gutter-30">
@@ -741,34 +709,10 @@ function practiceAreasPage() {
       </div>
     </section>
 
-    <section class="row section--pa-list" aria-label="List of Services">
-      <div class="wrap">
-        <div class="col c12">
-          <ul class="services">
-${items}
-          </ul>
-        </div>
-      </div>
-    </section>
-${CTA('Not sure which area fits?')}`,
-  });
-}
-
-function businessLawPage() {
-  return interiorPage({
-    path: '/business-law',
-    current: 'business-law',
-    preload: [['card-business-640.jpg', 'card-business-1000.jpg', 'card-business-1440.jpg']],
-    jsonld: [
-      LEGAL_SERVICE,
-      breadcrumb('Business Law', '/business-law'),
-      { '@context': 'https://schema.org', '@type': 'Service', name: 'Business Law', serviceType: 'Business Law', url: `${SITE}/business-law`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
-    ],
-    hero: heroBand('litigation parallax'),
-    main: `    <section class="row section--practice" aria-labelledby="biz-heading">
+    <section class="row section--pa-area" id="business-law" aria-labelledby="biz-heading">
       <div class="wrap">
         <div class="col c12 gutter-30">
-          <h1 class="page-title" id="biz-heading">Business Law</h1>
+          <h2 class="area-title" id="biz-heading">Business Law</h2>
           <div class="divider divider--left divider--thick"><hr></div>
           <div class="prose prose--16">
             <p>We apply forward-thinking ideas and solutions to the most challenging legal issues you face, and approach each case with passion and commitment. From the first steps of the litigation process and right through to the end, we&rsquo;ll handle everything you need to be in your best shape at trial. We know how complicated litigation can be. From pleadings, affidavits, examinations, motions, mediation, undertakings, refusals, pretrial, and finally, trial.</p>
@@ -781,73 +725,36 @@ function businessLawPage() {
         </div>
       </div>
     </section>
-${CTA('Have a transaction in front of you?')}`,
-  });
-}
 
-function realEstatePage() {
-  return interiorPage({
-    path: '/real-estate',
-    current: 'real-estate',
-    preload: [['hero-realestate-640.jpg', 'hero-realestate-1024.jpg', 'hero-realestate-1920.jpg']],
-    jsonld: [
-      LEGAL_SERVICE,
-      breadcrumb('Real Estate', '/real-estate'),
-      { '@context': 'https://schema.org', '@type': 'Service', name: 'Real Estate Law', serviceType: 'Real Estate Law', url: `${SITE}/real-estate`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
-    ],
-    hero: heroBand('realestate parallax'),
-    main: `    <section class="row section--practice" aria-labelledby="re-heading">
+    <section class="row section--pa-area" id="corporate-law" aria-labelledby="corp-heading">
       <div class="wrap">
         <div class="col c12 gutter-30">
-          <h1 class="page-title" id="re-heading">Real Estate Law</h1>
-          <div class="divider divider--left divider--thick"><hr></div>
-          <div class="prose prose--16">
-            <p>Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, financing, land use planning and more. We take a proactive approach to developing and implementing solutions to your distinct challenges to help you manage your real estate assets.</p>
-            <p><b class="subhead">Acquisition and Disposition</b><br>We represent purchasers and sellers of commercial property through every stage of a transaction &mdash; letters of intent, contract negotiation, due diligence, title and survey review, and closing. We structure deals to protect your position on price, contingencies and timing, and we identify the problems that surface in diligence before they become obstacles at the table.</p>
-            <p><b class="subhead">Financing</b><br>We act for both borrowers and institutional lenders in mortgage financing, construction loans, mezzanine debt and refinancing. Our work covers loan commitments, security instruments, guaranties, intercreditor and subordination agreements, and the estoppels and consents a lender will require before it funds.</p>
-            <p><b class="subhead">Leasing</b><br>We negotiate office, retail and industrial leases for landlords and tenants, including build-out and tenant improvement allowances, escalation and pass-through provisions, assignment and subletting, options to renew or expand, and the surrender and restoration obligations that decide how a tenancy ends.</p>
-            <p><b class="subhead">Land Use and Development</b><br>We guide owners and developers through zoning analysis, variances and special permits, site plan approval, subdivision, and appearances before municipal boards. We work alongside your architects, engineers and planners so the legal path and the design track advance together rather than in sequence.</p>
-            <p><b class="subhead">1031 Exchanges</b><br>We structure like-kind exchanges to defer capital gains on investment property, coordinating with qualified intermediaries and your tax advisors to keep identification and closing inside the statutory deadlines. We also handle reverse and improvement exchanges where the replacement property must be acquired first.</p>
-            <p><b class="subhead">Entity Structuring and Joint Ventures</b><br>We form the holding companies, single-purpose entities and joint ventures through which real estate is owned, and draft the operating agreements that govern capital contributions, distributions, control, transfer restrictions and exit. Getting the structure right at acquisition is what makes a clean disposition possible years later.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-${CTA('Buying, selling or financing property?')}`,
-  });
-}
-
-function corporatePage() {
-  return interiorPage({
-    path: '/corporate',
-    current: 'corporate',
-    preload: [['hero-corporate-640.jpg', 'hero-corporate-1024.jpg', 'hero-corporate-1920.jpg']],
-    jsonld: [
-      LEGAL_SERVICE,
-      breadcrumb('Corporate', '/corporate'),
-      { '@context': 'https://schema.org', '@type': 'Service', name: 'Corporate Law', serviceType: 'Corporate Law', url: `${SITE}/corporate`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
-    ],
-    hero: heroBand('corporate parallax'),
-    main: `    <section class="row section--practice" aria-labelledby="corp-heading">
-      <div class="wrap">
-        <div class="col c12 gutter-30">
-          <h1 class="page-title" id="corp-heading">Corporate Law</h1>
+          <h2 class="area-title" id="corp-heading">Corporate Law</h2>
           <div class="divider divider--left divider--thick"><hr></div>
           <div class="prose prose--16">
             <p>We help create business entities, such as corporations, partnerships and joint ventures. We also represent both foreign and domestic companies to ensure the legal passage of goods, services, capital and more across borders. Our clients include multinational companies as well as small businesses.</p>
-            <p><b class="subhead">Entity Formation</b><br>We select and form the right vehicle for the business you actually intend to run &mdash; C corporation, S corporation, limited liability company, limited partnership or joint venture &mdash; weighing tax treatment, investor expectations, liability protection and the cost of ongoing compliance. We handle incorporation, qualification in additional states, and the organisational records that lenders and investors will later ask to see.</p>
-            <p><b class="subhead">Governance</b><br>We prepare and maintain bylaws, operating agreements, board and shareholder consents, committee charters and minute books, and we advise directors and officers on fiduciary duties, conflicts of interest, indemnification and the mechanics of acting properly as a board. Good governance is inexpensive to maintain and very expensive to reconstruct.</p>
-            <p><b class="subhead">Shareholder and Operating Agreements</b><br>We draft the agreements that decide what happens when owners disagree: voting and control, transfer restrictions, rights of first refusal, tag-along and drag-along rights, buy-sell provisions, valuation mechanics, and departure on death, disability or dispute. These provisions are negotiated best while everyone is still on good terms.</p>
-            <p><b class="subhead">Commercial Contracts</b><br>We negotiate the agreements a company runs on &mdash; supply and distribution, licensing, services and SaaS, manufacturing, non-disclosure and employment &mdash; with attention to indemnification, limitation of liability, intellectual property ownership, data protection and termination rights.</p>
-            <p><b class="subhead">Cross-Border Counsel</b><br>We represent foreign companies establishing a United States presence and domestic companies expanding abroad, covering entity selection, distribution and agency arrangements, cross-border supply terms, and the movement of goods, services and capital between jurisdictions.</p>
-            <p><b class="subhead">Corporate Transactions</b><br>We handle stock and asset purchases, mergers, reorganisations, recapitalisations and dissolutions, from letter of intent and diligence through definitive documents, closing and post-closing adjustments &mdash; including the consents and third-party approvals that most often determine whether a deal closes on schedule.</p>
           </div>
         </div>
       </div>
     </section>
-${CTA('Forming or restructuring a company?')}`,
+
+    <section class="row section--pa-area" id="real-estate-law" aria-labelledby="re-heading">
+      <div class="wrap">
+        <div class="col c12 gutter-30">
+          <h2 class="area-title" id="re-heading">Real Estate Law</h2>
+          <div class="divider divider--left divider--thick"><hr></div>
+          <div class="prose prose--16">
+            <p>Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, financing, land use planning and more. We take a proactive approach to developing and implementing solutions to your distinct challenges to help you manage your real estate assets.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+${CTA('Not sure which area fits?')}`,
   });
 }
+
+
+
 
 function contactPage() {
   return interiorPage({
@@ -906,9 +813,6 @@ const PAGES = [
   ['index.html', homePage()],
   ['about.html', aboutPage()],
   ['practiceareas.html', practiceAreasPage()],
-  ['business-law.html', businessLawPage()],
-  ['real-estate.html', realEstatePage()],
-  ['corporate.html', corporatePage()],
   ['contact.html', contactPage()],
 ];
 

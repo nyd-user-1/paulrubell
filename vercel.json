@@ -6,27 +6,42 @@
   "redirects": [
     {
       "source": "/Litigation",
-      "destination": "/business-law",
+      "destination": "/practiceareas#business-law",
       "permanent": true
     },
     {
       "source": "/litigation",
-      "destination": "/business-law",
+      "destination": "/practiceareas#business-law",
       "permanent": true
     },
     {
       "source": "/business",
-      "destination": "/business-law",
+      "destination": "/practiceareas#business-law",
+      "permanent": true
+    },
+    {
+      "source": "/business-law",
+      "destination": "/practiceareas#business-law",
+      "permanent": true
+    },
+    {
+      "source": "/corporate",
+      "destination": "/practiceareas#corporate-law",
+      "permanent": true
+    },
+    {
+      "source": "/real-estate",
+      "destination": "/practiceareas#real-estate-law",
+      "permanent": true
+    },
+    {
+      "source": "/realestate",
+      "destination": "/practiceareas#real-estate-law",
       "permanent": true
     },
     {
       "source": "/practice-areas",
       "destination": "/practiceareas",
-      "permanent": true
-    },
-    {
-      "source": "/realestate",
-      "destination": "/real-estate",
       "permanent": true
     },
     {

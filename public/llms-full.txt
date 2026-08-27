@@ -23,9 +23,9 @@ Paul's extensive experience includes partnership agreements, shareholder dispute
 
 ### Practice Areas
 
-- **Business Law** — Business disputes are part of every business. We help you protect your best interests. (https://www.paulrubell.com/business-law)
-- **Corporate Law** — We help create business entities, such as corporations, partnerships and joint ventures. (https://www.paulrubell.com/corporate)
-- **Real Estate Law** — Draw upon our full complement of services to safeguard and manage your assets. (https://www.paulrubell.com/real-estate)
+- **Business Law** — Business disputes are part of every business. We help you protect your best interests. (https://www.paulrubell.com/practiceareas#business-law)
+- **Corporate Law** — We help create business entities, such as corporations, partnerships and joint ventures. (https://www.paulrubell.com/practiceareas#corporate-law)
+- **Real Estate Law** — Draw upon our full complement of services to safeguard and manage your assets. (https://www.paulrubell.com/practiceareas#real-estate-law)
 
 ### Highlighted Transactions
 
@@ -86,13 +86,13 @@ Our mission is based on the values we hold true: integrity, service and excellen
 
 Rubell Law provides legal counsel, business advice and strategic planning to established and emerging companies, entrepreneurs and investors. His practice areas include mergers and acquisitions; private equity; venture capital; private and public securities offerings; and governance. Paul's extensive experience includes partnership agreements, shareholder disputes and litigation strategy, commercial real estate acquisition and financing. In addition, he has extensive experience handling real estate acquisitions, divestitures and financing, and designing and structuring complex transactions.
 
-**Real Estate** — Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, and more. (https://www.paulrubell.com/real-estate)
+**Real Estate** — Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, and more. (https://www.paulrubell.com/practiceareas#real-estate-law)
 
-**Corporate** — We represent both foreign and domestic companies to ensure the legal passage of goods, services, capital and more across borders. (https://www.paulrubell.com/corporate)
+**Corporate** — We represent both foreign and domestic companies to ensure the legal passage of goods, services, capital and more across borders. (https://www.paulrubell.com/practiceareas#corporate-law)
 
 ---
 
-## Business Law — https://www.paulrubell.com/business-law
+## Business Law — https://www.paulrubell.com/practiceareas#business-law
 
 ### Business Law
 
@@ -115,7 +115,7 @@ We provide counsel on traditional business transactions, the formation of new en
 
 ---
 
-## Real Estate — https://www.paulrubell.com/real-estate
+## Real Estate — https://www.paulrubell.com/practiceareas#real-estate-law
 
 ### Real Estate Law
 
@@ -123,7 +123,7 @@ Draw upon our full complement of services and expertise to help you through land
 
 ---
 
-## Corporate — https://www.paulrubell.com/corporate
+## Corporate — https://www.paulrubell.com/practiceareas#corporate-law
 
 ### Corporate Law
 

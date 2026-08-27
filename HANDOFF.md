@@ -48,11 +48,11 @@ copy.** Everything else in that branch is mechanical and safe.
 
 ```
 public/            the deployable output — Vercel serves this directly, no build step
-  *.html           seven pages, generated (do not hand-edit; see below)
+  *.html           four pages, generated (do not hand-edit; see below)
   css/site.css     the single stylesheet, ~1150 lines, sectioned and commented
   js/site.js       mobile drawer, dropdown, hero slideshow, hero parallax
   fonts/ images/   self-hosted; nothing loads from Duda's CDN
-tools/render.mjs   generates the seven pages from shared partials
+tools/render.mjs   generates the four pages from shared partials
 tools/qa/          local server + functional + Lighthouse harnesses
 tools/source-images/  untouched client artwork, outside the deployed dir
 vercel.json        outputDirectory, cleanUrls, redirects, cache + security headers
@@ -68,7 +68,7 @@ harness fails if the hash and the file drift apart. Then:
 ```bash
 node tools/render.mjs        # regenerate public/*.html
 node tools/qa/serve.js       # local server on :4321
-node tools/qa/functional.js  # 26 checks (needs: npm i -D playwright)
+node tools/qa/functional.js  # 33 checks (needs: npm i -D playwright)
 node tools/qa/lighthouse.mjs # mobile Lighthouse (needs: npm i -D lighthouse playwright)
 ```
 
@@ -86,9 +86,9 @@ Measured on the `revisions` branch, mobile, with compression as Vercel serves:
 
 | Page | Perf | A11y | Best practices | SEO |
 |---|---|---|---|---|
-| all seven | 97–99 | **100** | 100 | 100 |
+| all four | 97–99 | **100** | 100 | 100 |
 
-Plus: 26/26 functional checks, every page well-formed with exactly one `<h1>`, no
+Plus: 33/33 functional checks, every page well-formed with exactly one `<h1>`, no
 missing or unused assets, no external runtime dependencies.
 
 On `main`, accessibility is 87–88 — the old palette fails WCAG AA in four places.
@@ -102,11 +102,14 @@ On `main`, accessibility is 87–88 — the old palette fails WCAG AA in four pl
 - **The home hero is a two-slide slideshow** (3s cadence, 0.8s slide-up) and the
   About hero uses `background-attachment: fixed` plus a scroll parallax. Both
   reproduce the old behaviour and both honour `prefers-reduced-motion`.
-- **`/Litigation` was renamed to `/business-law`** on `revisions`. `/Litigation`,
-  `/litigation` and `/business` all 308 to it, so search equity transfers. This is
-  the one change touching a URL with existing equity — easy to revert if wanted.
+- **The three practice areas are one page.** Business, Corporate and Real Estate
+  live on `/practiceareas` as `#business-law`, `#corporate-law` and
+  `#real-estate-law`. `/Litigation`, `/litigation`, `/business`, `/business-law`,
+  `/corporate`, `/real-estate` and `/realestate` all 308 straight to the matching
+  anchor — no redirect chains. This is the change that touches URLs with existing
+  equity; the client asked for it explicitly.
 - **The Super Lawyers badge is the logo**, not a headshot, and the old site showed
-  it on the homepage only. `revisions` puts the white branded header on all seven.
+  it on the homepage only. `revisions` puts the white branded header on every page.
 - Dropped as Duda platform artifacts: a hidden "Share by:" popup, RSS/Atom links
   to endpoints that would 404, a storefront prefetch, an invisible 172KB
   background image, and a dead UA-126104687-1 Google Analytics tag.

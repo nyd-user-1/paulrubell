@@ -1754,3 +1754,32 @@ button:focus-visible {
   font-size: 16px;
   letter-spacing: 0;
 }
+
+/* --- consolidated practice areas -----------------------------------------
+   The three areas were separate pages with their own h1; they are now one
+   page with a single h1 ("Practice Areas") and three h2 sections addressed
+   by #business-law / #corporate-law / #real-estate-law. */
+.area-title {
+  margin: 8px 0;
+  padding: 2px 0;
+  font-family: var(--mont);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -.022em;
+  color: var(--dark);
+  text-align: left;
+  text-wrap: balance;
+}
+.section--pa-area { padding: 20px 30px 40px; }
+/* Deep links must not land with the heading jammed against the viewport top. */
+.section--pa-area { scroll-margin-top: 24px; }
+
+/* The closing CTA heading is an h3 now, sized to match. */
+.cta-title { font-size: 20px; }
+
+@media (max-width: 767px) {
+  .area-title { font-size: 22px; }
+  .section--pa-area { padding: 10px 0 30px; }
+  .section--pa-area > .wrap > .col { padding: 0 15px !important; }
+}

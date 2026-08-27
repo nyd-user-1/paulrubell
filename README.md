@@ -12,21 +12,19 @@ public/                 deployable output (Vercel outputDirectory)
   index.html            /
   about.html            /about
   practiceareas.html    /practiceareas
-  business-law.html     /business-law      ← renamed from /Litigation (308 redirect kept)
-  real-estate.html      /real-estate
-  corporate.html        /corporate
   contact.html          /contact
   css/site.css          the single stylesheet
   js/site.js            mobile drawer, Practice Areas dropdown, hero slideshow, hero parallax
   fonts/                self-hosted Montserrat + Open Sans (variable, woff2, latin + latin-ext)
   images/               self-hosted imagery at three widths per breakpoint
   robots.txt sitemap.xml llms.txt llms-full.txt manifest.json favicon.ico
-tools/render.mjs        regenerates the seven pages from shared header/footer partials
+tools/render.mjs        regenerates the four pages from shared header/footer partials
 vercel.json             clean URLs, redirects, cache + security headers
 ```
 
 `cleanUrls` maps `about.html` → `/about`. `/Litigation`, `/litigation` and
-`/business` all 308 to `/business-law`, so the old URL keeps its search equity.
+`/business` all 308 to `/practiceareas#business-law`, so the old URL keeps its
+search equity.
 
 ## Working on it
 
@@ -93,7 +91,7 @@ Behaviour carried over from the live site that is worth knowing about:
 
 ## Accessibility
 
-Lighthouse accessibility is **100 on all seven pages**. Heading hierarchy, alt
+Lighthouse accessibility is **100 on every page**. Heading hierarchy, alt
 text, visible focus states, `aria` on the drawer and dropdown, a skip link, and
 tap targets at or above 24px throughout.
 
@@ -113,9 +111,6 @@ The old palette failed WCAG AA in four places; those colours were changed:
 | `/` | 97 | 100 | 100 | 100 |
 | `/about` | 99 | 100 | 100 | 100 |
 | `/practiceareas` | 98 | 100 | 100 | 100 |
-| `/business-law` | 97 | 100 | 100 | 100 |
-| `/real-estate` | 99 | 100 | 100 | 100 |
-| `/corporate` | 99 | 100 | 100 | 100 |
 | `/contact` | 99 | 100 | 100 | 100 |
 
 ## Revisions (branch `revisions`)
@@ -128,7 +123,10 @@ pages intentionally diverge from the old Duda site from here on.
   showed branding on the homepage only and left the other six with an empty blue band.
 - Consistent naming: "Business Law" / "Real Estate Law" / "Corporate Law" in the
   nav, cards, list and headings.
-- `/Litigation` renamed to `/business-law`; the old URL 308s to it.
+- Business, Corporate and Real Estate law are one page addressed by fragment
+  (`/practiceareas#business-law`, `#corporate-law`, `#real-estate-law`). `/Litigation`,
+  `/litigation`, `/business`, `/business-law`, `/corporate`, `/real-estate` and
+  `/realestate` all 308 to the matching anchor.
 - Phone rendered one way sitewide (`516-946-1706`); the old site used three formats.
 - Email normalised to lowercase `paul@paulrubell.com`.
 
@@ -150,7 +148,7 @@ pages intentionally diverge from the old Duda site from here on.
 - "Get directions" link on the contact page.
 
 **SEO / AI SEO**
-- Unique title and meta description per page (was one identical pair across all seven).
+- Unique title and meta description per page (was one identical pair across every page).
 - `llms.txt` referenced from `robots.txt` and linked from every `<head>`.
 
 ### Still needs input

@@ -3,7 +3,7 @@
    Run: node tools/qa/lighthouse.mjs */
 import lighthouse from 'lighthouse';
 import { chromium } from 'playwright';
-const PAGES=['/','/about','/practiceareas','/business-law','/real-estate','/corporate','/contact'];
+const PAGES=['/','/about','/practiceareas','/contact'];
 const browser = await chromium.launch({args:['--remote-debugging-port=9222']});
 const port = 9222;
 const rows=[]; const issues={};

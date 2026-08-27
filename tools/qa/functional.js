@@ -26,7 +26,7 @@ function chk(name, cond, extra=''){ if(cond){pass++;console.log('  PASS  '+name)
   const kb=await p.evaluate(()=>({op:getComputedStyle(document.querySelector('.mainnav .subnav')).opacity,
                                   focused:document.activeElement.getAttribute('href')}));
   chk('opens on keyboard focus', kb.op==='1', JSON.stringify(kb));
-  chk('tab from parent lands on /business-law', kb.focused==='/business-law', JSON.stringify(kb));
+  chk('tab from parent lands on the Business Law anchor', kb.focused==='/practiceareas#business-law', JSON.stringify(kb));
   await ctx.close();
 
   // ---------- mobile: hamburger drawer ----------
@@ -44,7 +44,7 @@ function chk(name, cond, extra=''){ if(cond){pass++;console.log('  PASS  '+name)
                                   exp:document.querySelector('.hamburger').getAttribute('aria-expanded')}));
   chk('drawer opens on tap', Math.abs(d1.x) < 1, JSON.stringify(d1));
   chk('aria-expanded=true', d1.exp==='true');
-  chk('submenu items visible in drawer', await p.isVisible('.drawer .subnav a[href="/business-law"]'));
+  chk('submenu items visible in drawer', await p.isVisible('.drawer .subnav a[href="/practiceareas#business-law"]'));
   await p.touchscreen.tap(345, 500);              // right of the 281px drawer
   await p.waitForTimeout(600);
   const d2=await p.evaluate(()=>document.querySelector('.drawer').getBoundingClientRect().x);
@@ -59,7 +59,7 @@ function chk(name, cond, extra=''){ if(cond){pass++;console.log('  PASS  '+name)
   console.log('\n[links]');
   ctx=await br.newContext({viewport:{width:1440,height:900}});
   p=await ctx.newPage();
-  const pages=['/','/about','/practiceareas','/business-law','/real-estate','/corporate','/contact'];
+  const pages=['/','/about','/practiceareas','/contact'];
   let tel=new Set(), mail=new Set(), li=0, internal=new Set();
   for (const path of pages){
     await p.goto(B+path,{waitUntil:'domcontentloaded'});
@@ -75,11 +75,20 @@ function chk(name, cond, extra=''){ if(cond){pass++;console.log('  PASS  '+name)
   chk('every tel: is 516-946-1706', [...tel].every(t=>t==='tel:516-946-1706'), [...tel].join(','));
   chk('no 515 anywhere', ![...tel].some(t=>t.includes('515')));
   chk('single lowercase mailto sitewide', [...mail].join(',')==='mailto:paul@paulrubell.com', [...mail].join(','));
-  chk('LinkedIn link present on 8 spots', li===8, 'count='+li);
+  chk('LinkedIn link present on 5 spots', li===5, 'count='+li);
 
+  /* Fragment links are checked twice: the document must serve 200, and the
+     target id must actually exist on it. A same-document goto returns null,
+     so the document is always fetched by path. */
   for (const href of [...internal].filter(h=>!h.startsWith('/css')&&!h.startsWith('/js')&&!h.startsWith('/images')&&!h.startsWith('/fonts')&&h!=='/manifest.json'&&h!=='/favicon.ico')){
-    const res=await p.goto(B+href,{waitUntil:'domcontentloaded'});
-    chk('internal '+href+' -> '+res.status(), res.status()===200);
+    const [path,frag]=href.split('#');
+    await p.goto('about:blank');
+    const res=await p.goto(B+path,{waitUntil:'domcontentloaded'});
+    chk('internal '+path+' -> '+(res&&res.status()), !!res && res.status()===200);
+    if (frag){
+      const found=await p.evaluate(id=>!!document.getElementById(id), frag);
+      chk('  anchor #'+frag+' exists on '+path, found);
+    }
   }
   /* Asset cache-busting. css/js ship with Cache-Control: immutable, so the
      ?v= hash in the markup is the ONLY thing that lets a returning visitor
@@ -101,10 +110,21 @@ function chk(name, cond, extra=''){ if(cond){pass++;console.log('  PASS  '+name)
     chk(rel+' hash matches the file on disk ('+want+')', bad.length===0, bad.join(' '));
   }
 
-  const cased=await p.goto(B+'/business-law',{waitUntil:'domcontentloaded'});
-  chk('/business-law serves 200', cased.status()===200);
-  const h1=await p.evaluate(()=>document.querySelector('h1')?.textContent.trim());
-  chk('/business-law is the Business Law page', h1==='Business Law', h1);
+  /* The three practice areas are one page now, addressed by fragment. */
+  console.log('\n[practice areas]');
+  const pa=await p.goto(B+'/practiceareas',{waitUntil:'domcontentloaded'});
+  chk('/practiceareas serves 200', pa.status()===200);
+  const pastruct=await p.evaluate(()=>({
+    h1:[...document.querySelectorAll('h1')].map(h=>h.textContent.trim()),
+    areas:[...document.querySelectorAll('.section--pa-area')].map(s=>({
+      id:s.id, h2:s.querySelector('h2')?.textContent.trim(), words:(s.textContent.trim().match(/\S+/g)||[]).length })),
+  }));
+  chk('exactly one h1, "Practice Areas"', pastruct.h1.length===1 && pastruct.h1[0]==='Practice Areas', JSON.stringify(pastruct.h1));
+  for (const want of ['business-law','corporate-law','real-estate-law']){
+    const a=pastruct.areas.find(x=>x.id===want);
+    chk('#'+want+' section present with an h2', !!a && !!a.h2, JSON.stringify(a));
+  }
+  chk('practice areas are h2, not h1', pastruct.areas.length===3, JSON.stringify(pastruct.areas.map(a=>a.id)));
 
   await br.close();
   console.log(`\n${pass} passed, ${fail} failed`);
