@@ -440,6 +440,7 @@ const CARDS = [
 const TXNS = [
   {
     logo: 'logo-southstar', ext: 'jpg', logoWidths: [640, 1222], alt: 'South Street condominium building',
+    photo: true,   // a photograph, not a mark: fills the media tile instead of sitting inside it
     title: 'Condominium Offering', titleInk: 'black',
     body: `<p class="attrib"><strong>Paul Rubell, Attorney at Law P.C. represented the Sponsor.</strong></p>`,
   },
@@ -475,6 +476,7 @@ const TXNS = [
   },
   {
     logo: 'logo-morganstanley', ext: 'jpg', logoWidths: [640, 854], alt: 'Morgan Stanley',
+    photo: true,
     title: 'Line of Credit', titleInk: 'black',
     body: `<p><span>International Art Trading, LLC received a</span> <strong>$25,000,000 line of credit from Morgan Stanley.</strong></p>
               <p class="attrib"><strong>Paul Rubell, Attorney at Law P.C.&nbsp;represented the Borrower.</strong></p>`,
@@ -504,7 +506,7 @@ function homePage() {
     const rule = i === 0 || TXNS[i - 1].innerRule ? '' : `          <div class="txn-rule"><hr></div>\n`;
     const inner = t.innerRule ? `\n                <div class="txn-rule"><hr></div>` : '';
     return `${rule}          <div class="txn${t.innerRule ? ' txn--flush' : ''}">
-            <div class="txn-logo txn-logo--${t.logo.replace('logo-', '')}" role="img" aria-label="${t.alt}"></div>
+            <div class="txn-logo txn-logo--${t.logo.replace('logo-', '')}${t.photo ? ' txn-logo--photo' : ''}" role="img" aria-label="${t.alt}"></div>
             <div class="txn-body">
               <h3${t.titleInk === '333' ? ' class="ink-333"' : ''}>${t.title}</h3>
               <div class="txn-copy">

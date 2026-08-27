@@ -1455,3 +1455,237 @@ button:focus-visible {
     transition: none;
   }
 }
+
+/* ==========================================================================
+   16. Design pass — 2026
+   Same layout, same palette. What changes is the finish: one radius scale,
+   one shadow scale, one easing curve, and a media tile that makes seven
+   logos of seven different shapes read as a set.
+   ========================================================================== */
+
+:root {
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  /* Layered rather than a single blur: a tight contact shadow for the edge,
+     a wide ambient one for the lift. */
+  --sh-sm: 0 1px 2px rgba(16, 24, 40, .05), 0 1px 3px rgba(16, 24, 40, .06);
+  --sh-md: 0 2px 4px rgba(16, 24, 40, .04), 0 6px 16px rgba(16, 24, 40, .08);
+  --sh-lg: 0 4px 8px rgba(16, 24, 40, .05), 0 16px 40px rgba(16, 24, 40, .12);
+  --hairline: #e6e8ec;
+  --ease: cubic-bezier(.25, .4, .25, 1);
+}
+
+/* --- type ---------------------------------------------------------------
+   Montserrat at display sizes is loose by default. Tightening the tracking
+   and balancing the ragged edge is most of the difference between "a heading"
+   and "a designed heading". */
+.hero h1,
+.hero h2,
+.page-title,
+.practice h2,
+.transactions .intro-col h2,
+.cta-title,
+.txn-body h3,
+.welcome .lede h2 {
+  letter-spacing: -.022em;
+  text-wrap: balance;
+}
+
+.page-title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.14;
+}
+.practice h2,
+.transactions .intro-col h2 { line-height: 1.12; }
+.txn-body h3 { line-height: 1.2; }
+
+/* --- the section accent rule --------------------------------------------
+   Was a 42px hairline. Now a short rounded bar that reads as deliberate. */
+.divider hr {
+  height: 3px;
+  min-height: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--blue);
+}
+.divider { width: 56px; }
+.divider--thick hr { height: 4px; min-height: 4px; }
+.divider--wide { width: 100%; }
+.divider--wide hr { height: 1px; min-height: 1px; background: var(--hairline); }
+.divider--dotted hr {
+  height: 0;
+  min-height: 0;
+  border-top: 2px dotted var(--blue);
+  background: none;
+}
+
+/* --- transaction media tiles --------------------------------------------
+   The set mixes wordmarks, a stacked logo and one photograph, at seven
+   different aspect ratios. One fixed 4:3 tile holds all of them; logos sit
+   inside a generous inset (background-origin: content-box makes `contain`
+   respect the padding), so a wide wordmark and a squat badge end up the same
+   optical size. The photograph opts out and fills the tile edge to edge. */
+.txn {
+  align-items: flex-start;   /* else the tile stretches to the row and aspect-ratio never applies */
+}
+.txn-logo {
+  width: 41.66667%;
+  aspect-ratio: 3 / 2;
+  min-height: 0;
+  /* Fixed, not percentage: percentage padding resolves against the parent's
+     width, which blew the inset out to a third of the tile. */
+  padding: 20px 24px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background-color: #fff;
+  background-origin: content-box;
+  background-size: contain;
+  box-shadow: var(--sh-sm);
+  transition: box-shadow .28s var(--ease), transform .28s var(--ease);
+}
+.txn-logo--photo {
+  padding: 0;
+  background-origin: padding-box;
+  background-size: cover;
+  overflow: hidden;
+}
+.txn { border-radius: var(--r-md); }
+.txn:hover .txn-logo {
+  transform: translateY(-3px);
+  box-shadow: var(--sh-md);
+}
+.txn-rule hr { border-top-color: var(--hairline); }
+
+/* --- practice-area tiles ------------------------------------------------- */
+.gallery-thumb { padding: 8px; }
+.gallery-card {
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-md);
+  transition: box-shadow .3s var(--ease), transform .3s var(--ease);
+}
+.gallery-card:hover,
+.gallery-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--sh-lg);
+}
+
+/* --- buttons -------------------------------------------------------------
+   A press state matters more than a hover state on touch, so both are here. */
+.btn {
+  box-shadow: var(--sh-sm);
+  transition: background-color .2s var(--ease), color .2s var(--ease),
+              box-shadow .2s var(--ease), transform .2s var(--ease);
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--sh-md); }
+.btn:active { transform: translateY(0); box-shadow: var(--sh-sm); }
+.btn-call {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .18), 0 10px 30px rgba(0, 0, 0, .22);
+  background: rgba(0, 0, 0, .14);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition: background-color .25s var(--ease), box-shadow .25s var(--ease),
+              transform .25s var(--ease);
+}
+.btn-call:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, .3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .2), 0 16px 40px rgba(0, 0, 0, .28);
+}
+.btn-call:active { transform: translateY(0); }
+
+/* --- header + nav chrome -------------------------------------------------- */
+.badge-img {
+  border-radius: 6px;
+  box-shadow: var(--sh-md);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.badge-link:hover .badge-img {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-lg);
+}
+.mainnav .has-mega > .subnav {
+  border-radius: 0 0 var(--r-md) var(--r-md);
+  box-shadow: var(--sh-lg);
+}
+.mainnav .has-mega > .subnav > li > a { border-radius: var(--r-sm); }
+
+/* --- contact page blocks -------------------------------------------------- */
+.contact-block {
+  padding: 28px 22px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: #fff;
+  box-shadow: var(--sh-sm);
+  transition: box-shadow .28s var(--ease), transform .28s var(--ease);
+}
+.contact-block:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sh-md);
+}
+
+/* --- links + focus -------------------------------------------------------- */
+.prose a,
+.contact-block .directions a,
+.welcome .lede h2 a {
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: .18em;
+  transition: color .18s var(--ease);
+}
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+::selection { background: rgba(0, 117, 187, .18); }
+
+@media (prefers-reduced-motion: reduce) {
+  .txn:hover .txn-logo,
+  .gallery-card:hover,
+  .gallery-card:focus-within,
+  .btn:hover,
+  .btn-call:hover,
+  .badge-link:hover .badge-img,
+  .contact-block:hover { transform: none; }
+}
+
+/* --- small screens -------------------------------------------------------- */
+@media (max-width: 767px) {
+  .txn-logo {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 22px 30px;
+  }
+  .gallery-thumb { padding: 7px; }
+  .page-title { font-size: 30px; }
+  .contact-block { padding: 22px 18px; }
+}
+
+/* --- contact page --------------------------------------------------------
+   The blocks are the grid columns themselves, so the gap has to come off the
+   column width rather than from padding, and the section's 100px dead band
+   (a Duda spacer with nothing in it) tightens up now that the cards carry
+   their own weight. */
+.contact-spacer { height: 40px; }
+.section--contact-blocks > .wrap { gap: 22px; }
+.section--contact-blocks > .wrap > .contact-block {
+  width: calc(33.33333% - 15px);
+  padding: 30px 24px;
+}
+/* Was a fixed 154px block offset 71.8px from the left, which only read as
+   centred at one width. */
+.contact-block .contact-social {
+  width: auto;
+  margin: 18px 0 0;
+}
+.contact-block .cb-body p a { color: var(--blue); }
+
+@media (max-width: 767px) {
+  .contact-spacer { height: 24px; }
+  .section--contact-blocks > .wrap { gap: 14px; }
+  .section--contact-blocks > .wrap > .contact-block {
+    width: 100%;
+    padding: 24px 20px !important;
+  }
+}
