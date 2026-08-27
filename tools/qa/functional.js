@@ -81,6 +81,26 @@ function chk(name, cond, extra=''){ if(cond){pass++;console.log('  PASS  '+name)
     const res=await p.goto(B+href,{waitUntil:'domcontentloaded'});
     chk('internal '+href+' -> '+res.status(), res.status()===200);
   }
+  /* Asset cache-busting. css/js ship with Cache-Control: immutable, so the
+     ?v= hash in the markup is the ONLY thing that lets a returning visitor
+     pick up a stylesheet change. If someone edits css/site.css without
+     re-running tools/render.mjs, the pages keep pointing at the old hash and
+     every returning visitor renders new markup against stale CSS. */
+  console.log('\n[asset hashes]');
+  const {createHash}=require('crypto'), fsx=require('fs'), px=require('path');
+  const PUB=px.join(__dirname,'..','..','public');
+  const diskHash=(rel)=>createHash('sha1').update(fsx.readFileSync(px.join(PUB,rel))).digest('hex').slice(0,10);
+  for (const [rel,attr] of [['css/site.css','link[rel=stylesheet]'],['js/site.js','script[src*="site.js"]']]){
+    const want=diskHash(rel);
+    const bad=[];
+    for (const path of pages){
+      await p.goto(B+path,{waitUntil:'domcontentloaded'});
+      const url=await p.evaluate(sel=>{const e=document.querySelector(sel);return e&&(e.getAttribute('href')||e.getAttribute('src'));},attr);
+      if (!url || !url.includes('?v='+want)) bad.push(path+' -> '+url);
+    }
+    chk(rel+' hash matches the file on disk ('+want+')', bad.length===0, bad.join(' '));
+  }
+
   const cased=await p.goto(B+'/business-law',{waitUntil:'domcontentloaded'});
   chk('/business-law serves 200', cased.status()===200);
   const h1=await p.evaluate(()=>document.querySelector('h1')?.textContent.trim());

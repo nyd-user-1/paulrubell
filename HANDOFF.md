@@ -59,12 +59,16 @@ vercel.json        outputDirectory, cleanUrls, redirects, cache + security heade
 ```
 
 **Edit `tools/render.mjs`, not the HTML.** Head tags, header, nav, footer, JSON-LD
-and page bodies all live there. Then:
+and page bodies all live there. **Re-run the renderer after editing
+`css/site.css` or `js/site.js` as well** — both are served `immutable` and
+cache-busted by a `?v=<sha1>` the renderer derives from their contents, so
+skipping it leaves returning visitors on a stale stylesheet. The functional
+harness fails if the hash and the file drift apart. Then:
 
 ```bash
 node tools/render.mjs        # regenerate public/*.html
 node tools/qa/serve.js       # local server on :4321
-node tools/qa/functional.js  # 24 checks (needs: npm i -D playwright)
+node tools/qa/functional.js  # 26 checks (needs: npm i -D playwright)
 node tools/qa/lighthouse.mjs # mobile Lighthouse (needs: npm i -D lighthouse playwright)
 ```
 
@@ -84,7 +88,7 @@ Measured on the `revisions` branch, mobile, with compression as Vercel serves:
 |---|---|---|---|---|
 | all seven | 97–99 | **100** | 100 | 100 |
 
-Plus: 24/24 functional checks, every page well-formed with exactly one `<h1>`, no
+Plus: 26/26 functional checks, every page well-formed with exactly one `<h1>`, no
 missing or unused assets, no external runtime dependencies.
 
 On `main`, accessibility is 87–88 — the old palette fails WCAG AA in four places.

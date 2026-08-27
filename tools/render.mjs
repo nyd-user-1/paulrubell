@@ -5,7 +5,8 @@
  * committed HTML in /public is the deployable artifact and Vercel runs no
  * build step. Run with:  node tools/render.mjs
  */
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -56,6 +57,18 @@ const KEYWORDS =
 const TEL_HREF = 'tel:516-946-1706';           // corrected from the live site's 515 typo
 const MAIL_HREF = 'mailto:paul@paulrubell.com'; // every CTA lands here; the site has no form
 const OG_IMAGE = `${SITE}/images/og-image-200.png`;
+
+/* Content-hashed asset URLs. Without these the stylesheet and the markup are
+   cached independently, so a deploy that changes both hands a returning
+   visitor new HTML against whatever CSS their browser still holds — which is
+   exactly how the header collapsed after the mega-menu change. The hash makes
+   the URL change whenever the bytes change, which is also what lets the cache
+   header be immutable. Run this AFTER editing css/site.css or js/site.js;
+   tools/qa/functional.js fails if the two ever drift apart. */
+const assetHash = (rel) =>
+  createHash('sha1').update(readFileSync(join(OUT, rel))).digest('hex').slice(0, 10);
+const CSS_HREF = `/css/site.css?v=${assetHash('css/site.css')}`;
+const JS_SRC = `/js/site.js?v=${assetHash('js/site.js')}`;
 
 /* ----------------------------------------------------------- reveal fx -- */
 /* RevealFx "Mask Wipe" — the page entrance used on the other projects: a
@@ -216,7 +229,7 @@ function head({ path, preload = [], jsonld = [] }) {
   <link rel="preload" as="font" type="font/woff2" href="/fonts/montserrat-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/fonts/opensans-latin.woff2" crossorigin>
 ${preloads}
-  <link rel="stylesheet" href="/css/site.css">
+  <link rel="stylesheet" href="${CSS_HREF}">
 ${REVEAL_BOOT}
 ${blocks}
 </head>`;
@@ -400,7 +413,7 @@ function footer() {
 </footer>`;
 }
 
-const TAIL = `<script src="/js/site.js" defer></script>
+const TAIL = `<script src="${JS_SRC}" defer></script>
 </body>
 </html>
 `;

@@ -32,12 +32,20 @@ vercel.json             clean URLs, redirects, cache + security headers
 
 ```bash
 npx serve public          # or any static server
-node tools/render.mjs     # after editing header/footer/page content in tools/render.mjs
+node tools/render.mjs     # after editing tools/render.mjs, css/site.css OR js/site.js
 ```
 
 `tools/render.mjs` exists so the shared chrome (head, header, nav, footer, JSON-LD)
 lives in one place. It is a convenience, not a build step: the committed HTML in
 `public/` is what deploys, and Vercel never runs it.
+
+**Re-run it after editing `css/site.css` or `js/site.js` too.** Those two are
+served `Cache-Control: immutable` and are cache-busted by a `?v=<sha1>` query
+that `render.mjs` computes from the file contents. If you change the stylesheet
+without re-rendering, the pages keep pointing at the old hash and every
+returning visitor draws new markup against the stylesheet their browser already
+has — which silently breaks the layout. `tools/qa/functional.js` fails loudly
+if the hash in the HTML and the file on disk ever drift apart.
 
 ## Fidelity to the previous site
 
