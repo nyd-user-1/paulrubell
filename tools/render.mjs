@@ -54,7 +54,25 @@ const KEYWORDS =
   'business, real estate, real estate law, 1031, technology, tech, shareholder, dispute, ' +
   'stockholder, stock, securities, agreement';
 const TEL_HREF = 'tel:516-946-1706';           // corrected from the live site's 515 typo
+const MAIL_HREF = 'mailto:paul@paulrubell.com'; // every CTA lands here; the site has no form
 const OG_IMAGE = `${SITE}/images/og-image-200.png`;
+
+/* ----------------------------------------------------------- reveal fx -- */
+/* RevealFx "Mask Wipe" — the page entrance used on the other projects: a
+   left-to-right mask wipe with a blur settle and a small rise. Inlined in the
+   head so the armed (hidden) state is in place before the first paint and the
+   effect never depends on the deferred bundle. Every effect style is dropped
+   once it finishes — a lingering filter would make <main> a containing block
+   for fixed positioning. No-JS, no-mask and reduced-motion all fall through to
+   a plain page. */
+const REVEAL_BOOT = `  <script>(function(){var d=document.documentElement,s=d.style;
+if(!('maskImage' in s)&&!('webkitMaskImage' in s))return;
+try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;}catch(e){return;}
+d.classList.add('reveal-arm');
+function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){
+d.classList.remove('reveal-arm');d.classList.add('reveal-play');
+setTimeout(function(){d.classList.remove('reveal-play');},700);});});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();}());<\/script>`;
 
 /* ---------------------------------------------------------------- icons -- */
 const ICON_MAIL = (cls = 'icon-mail') => `<svg class="${cls}" viewBox="0 0 512 512" role="img" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="32" d="M48 112h416v288H48z"/><path fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="square" d="m64 128 192 144L448 128"/></svg>`;
@@ -199,6 +217,7 @@ function head({ path, preload = [], jsonld = [] }) {
   <link rel="preload" as="font" type="font/woff2" href="/fonts/opensans-latin.woff2" crossorigin>
 ${preloads}
   <link rel="stylesheet" href="/css/site.css">
+${REVEAL_BOOT}
 ${blocks}
 </head>`;
 }
@@ -208,10 +227,20 @@ const NAV_ITEMS = [
   { label: 'About', href: '/about', key: 'about' },
   {
     label: 'Practice Areas', href: '/practiceareas', key: 'practiceareas',
+    mega: true,
     sub: [
-      { label: 'Business Law', href: '/business-law', key: 'business-law' },
-      { label: 'Real Estate Law', href: '/real-estate', key: 'real-estate' },
-      { label: 'Corporate Law', href: '/corporate', key: 'corporate' },
+      {
+        label: 'Business Law', href: '/business-law', key: 'business-law',
+        desc: 'General corporate counsel, financing, M&amp;A and business formation.',
+      },
+      {
+        label: 'Real Estate Law', href: '/real-estate', key: 'real-estate',
+        desc: 'Acquisition and disposition, leasing, land use and 1031 exchanges.',
+      },
+      {
+        label: 'Corporate Law', href: '/corporate', key: 'corporate',
+        desc: 'Entity formation, governance and shareholder agreements.',
+      },
     ],
   },
   { label: 'Contact', href: '/contact', key: 'contact' },
@@ -222,17 +251,22 @@ const PA_CHILDREN = ['business-law', 'real-estate', 'corporate'];
 function navList(current, { id, cls, noToggle }) {
   const items = NAV_ITEMS.map((it) => {
     const isCurrent = it.key === current || (it.key === 'practiceareas' && PA_CHILDREN.includes(current));
-    const liCls = [it.sub ? 'has-sub' : '', isCurrent ? 'is-current' : ''].filter(Boolean).join(' ');
+    const liCls = [it.sub ? 'has-sub' : '', it.mega ? 'has-mega' : '', isCurrent ? 'is-current' : ''].filter(Boolean).join(' ');
     if (!it.sub) {
       return `        <li${liCls ? ` class="${liCls}"` : ''}><a href="${it.href}"${isCurrent ? ' aria-current="page"' : ''}><span class="nav-item-text">${it.label}</span></a></li>`;
     }
     const subs = it.sub
-      .map((s) => `            <li${s.key === current ? ' class="is-current"' : ''}><a href="${s.href}"${s.key === current ? ' aria-current="page"' : ''}><span class="nav-item-text">${s.label}</span></a></li>`)
+      .map((s) => `            <li${s.key === current ? ' class="is-current"' : ''}><a href="${s.href}"${s.key === current ? ' aria-current="page"' : ''}><span class="nav-item-text">${s.label}</span>${s.desc ? `<span class="sub-desc">${s.desc}</span>` : ''}</a></li>`)
       .join('\n');
+    /* The panel carries a trailing "all areas" link that only the desktop mega
+       menu shows; the drawer already reaches /practiceareas via its parent. */
+    const megaAll = it.mega
+      ? `\n            <li class="subnav-all"><a href="${it.href}"><span class="nav-item-text">All practice areas</span></a></li>`
+      : '';
     return `        <li class="${liCls}">
           <a href="${it.href}"${noToggle ? '' : ' aria-expanded="false" aria-controls="' + id + '-sub"'}${isCurrent ? ' aria-current="page"' : ''}><span class="nav-item-text">${it.label}${ICON_CHEVRON}</span></a>
           <ul class="subnav" id="${id}-sub">
-${subs}
+${subs}${megaAll}
           </ul>
         </li>`;
   }).join('\n');
@@ -301,15 +335,15 @@ ${mobileHeader()}
       <div class="col c6">
         <div class="row brandbar">
           <div class="wrap">
-            <div class="col c2 badge-col">
-              <a class="badge-link" href="/" aria-label="Paul Rubell, Attorney At Law, P.C. — home">
-                <img class="badge-img" src="/images/superlawyers-badge.png" width="344" height="286" alt="Rated by Super Lawyers &mdash; Paul Rubell, SuperLawyers.com">
-              </a>
-            </div>
-            <div class="col c10 name-col">
+            <div class="col name-col">
               <a class="brand-link" href="/">
                 <span class="brand-name">Paul Rubell</span>
                 <span class="brand-sub">Attorney At Law, P.C.</span>
+              </a>
+            </div>
+            <div class="col badge-col">
+              <a class="badge-link" href="/" aria-label="Paul Rubell, Attorney At Law, P.C. — home">
+                <img class="badge-img" src="/images/superlawyers-badge.png" width="344" height="286" alt="Rated by Super Lawyers &mdash; Paul Rubell, SuperLawyers.com">
               </a>
             </div>
           </div>
@@ -358,8 +392,7 @@ function footer() {
     <div class="wrap">
       <div class="col c12">
         <div class="copyright">
-          <div>&copy; 2026&nbsp;</div>
-          <div><p>Powered by <a href="http://www.craic.in" target="_blank" rel="noopener">Craic.in</a></p></div>
+          <div>&copy; 2026 Paul Rubell, Attorney At Law, P.C.</div>
         </div>
       </div>
     </div>
@@ -478,7 +511,7 @@ function homePage() {
 <div class="site">
 ${siteHeader('home')}
 
-  <main id="main">
+  <main id="main" class="reveal-fx">
 
     <section class="row hero" aria-label="Introduction">
       <div class="hero-slides" aria-hidden="true">
@@ -490,7 +523,7 @@ ${siteHeader('home')}
           <h1>Forward Looking</h1>
           <h2>Business Law</h2>
           <p class="tagline"><span>A boutique business law firm that practices at the intersection of business and technology&nbsp;</span>.&nbsp;</p>
-          <a class="btn-call" href="${TEL_HREF}"><span class="text">LET'S TALK</span></a>
+          <a class="btn-call" href="${MAIL_HREF}"><span class="text">LET'S TALK</span></a>
         </div>
       </div>
     </section>
@@ -550,6 +583,10 @@ ${TAIL}`;
 }
 
 /* --------------------------------------------------------- interior page -- */
+/* The hero band sits OUTSIDE .reveal-fx here: .page-hero--parallax uses
+   background-attachment: fixed, which an ancestor filter/transform re-crops
+   mid-animation and then snaps back when the wipe cleans up. The home hero has
+   no fixed attachment, so there the whole <main> is the reveal target. */
 function interiorPage({ path, current, preload, hero, jsonld, main }) {
   return `${head({ path, preload: preload || [], jsonld })}
 <body class="page-inner">
@@ -559,7 +596,9 @@ ${siteHeader(current)}
 
   <main id="main">
 ${hero || ''}
+    <div class="reveal-fx">
 ${main}
+    </div>
   </main>
 
 ${footer()}
@@ -573,10 +612,10 @@ const CTA = (lead) => `
       <div class="wrap">
         <div class="col c12">
           <h2 class="cta-title" id="cta-heading">${lead}</h2>
-          <p class="cta-copy">Call to discuss your matter directly with Paul Rubell &mdash; no intake queue, no gatekeeping.</p>
+          <p class="cta-copy">Write or call to discuss your matter directly with Paul Rubell &mdash; no intake queue, no gatekeeping.</p>
           <p class="cta-actions">
-            <a class="btn btn--primary" href="${TEL_HREF}">Call 516-946-1706</a>
-            <a class="btn btn--ghost" href="mailto:paul@paulrubell.com">Email the firm</a>
+            <a class="btn btn--primary" href="${MAIL_HREF}">Email Paul@paulrubell.com</a>
+            <a class="btn btn--ghost" href="${TEL_HREF}">Call 516-946-1706</a>
           </p>
         </div>
       </div>

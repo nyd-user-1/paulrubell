@@ -42,6 +42,14 @@
   <link rel="preload" as="image" href="/images/hero-realestate-1024.jpg" media="(min-width: 768px) and (max-width: 1024px)" fetchpriority="high">
   <link rel="preload" as="image" href="/images/hero-realestate-1920.jpg" media="(min-width: 1025px)" fetchpriority="high">
   <link rel="stylesheet" href="/css/site.css">
+  <script>(function(){var d=document.documentElement,s=d.style;
+if(!('maskImage' in s)&&!('webkitMaskImage' in s))return;
+try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;}catch(e){return;}
+d.classList.add('reveal-arm');
+function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){
+d.classList.remove('reveal-arm');d.classList.add('reveal-play');
+setTimeout(function(){d.classList.remove('reveal-play');},700);});});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();}());</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"LegalService","@id":"https://www.paulrubell.com/#organization","name":"Paul Rubell, Attorney At Law, P.C.","alternateName":"Paul Rubell","description":"A boutique law firm that practices at the intersection of business and technology.","url":"https://www.paulrubell.com","telephone":"+1-516-946-1706","email":"paul@paulrubell.com","image":"https://www.paulrubell.com/images/og-image-200.png","logo":"https://www.paulrubell.com/images/og-image-200.png","priceRange":"$$$","address":{"@type":"PostalAddress","streetAddress":"48 South Service Road, Suite 300","addressLocality":"Melville","addressRegion":"NY","postalCode":"11747","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":40.771,"longitude":-73.412},"areaServed":[{"@type":"State","name":"New York"},{"@type":"Country","name":"United States"}],"sameAs":["https://www.linkedin.com/in/paulrubell/"],"founder":{"@type":"Person","name":"Paul Rubell","jobTitle":"Attorney"},"knowsAbout":["Business law","Corporate law","Real estate law","Technology law","Privacy law","Mergers and acquisitions","Venture capital","Securities offerings"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Practice Areas","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Business Law","url":"https://www.paulrubell.com/business-law"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Corporate Law","url":"https://www.paulrubell.com/corporate"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Real Estate Law","url":"https://www.paulrubell.com/real-estate"}}]}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.paulrubell.com/"},{"@type":"ListItem","position":2,"name":"Real Estate","item":"https://www.paulrubell.com/real-estate"}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Real Estate Law","serviceType":"Real Estate Law","url":"https://www.paulrubell.com/real-estate","provider":{"@id":"https://www.paulrubell.com/#organization"},"areaServed":{"@type":"State","name":"New York"}}</script>
@@ -81,15 +89,15 @@
       <div class="col c6">
         <div class="row brandbar">
           <div class="wrap">
-            <div class="col c2 badge-col">
-              <a class="badge-link" href="/" aria-label="Paul Rubell, Attorney At Law, P.C. — home">
-                <img class="badge-img" src="/images/superlawyers-badge.png" width="344" height="286" alt="Rated by Super Lawyers &mdash; Paul Rubell, SuperLawyers.com">
-              </a>
-            </div>
-            <div class="col c10 name-col">
+            <div class="col name-col">
               <a class="brand-link" href="/">
                 <span class="brand-name">Paul Rubell</span>
                 <span class="brand-sub">Attorney At Law, P.C.</span>
+              </a>
+            </div>
+            <div class="col badge-col">
+              <a class="badge-link" href="/" aria-label="Paul Rubell, Attorney At Law, P.C. — home">
+                <img class="badge-img" src="/images/superlawyers-badge.png" width="344" height="286" alt="Rated by Super Lawyers &mdash; Paul Rubell, SuperLawyers.com">
               </a>
             </div>
           </div>
@@ -99,12 +107,13 @@
         <nav class="mainnav" aria-label="Primary">
       <ul>
         <li><a href="/about"><span class="nav-item-text">About</span></a></li>
-        <li class="has-sub is-current">
+        <li class="has-sub has-mega is-current">
           <a href="/practiceareas" aria-expanded="false" aria-controls="main-sub" aria-current="page"><span class="nav-item-text">Practice Areas<span class="nav-chevron" aria-hidden="true"><svg viewBox="0 0 320 512" focusable="false"><path fill="currentColor" d="M143 352.3 7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"/></svg></span></span></a>
           <ul class="subnav" id="main-sub">
-            <li><a href="/business-law"><span class="nav-item-text">Business Law</span></a></li>
-            <li class="is-current"><a href="/real-estate" aria-current="page"><span class="nav-item-text">Real Estate Law</span></a></li>
-            <li><a href="/corporate"><span class="nav-item-text">Corporate Law</span></a></li>
+            <li><a href="/business-law"><span class="nav-item-text">Business Law</span><span class="sub-desc">General corporate counsel, financing, M&amp;A and business formation.</span></a></li>
+            <li class="is-current"><a href="/real-estate" aria-current="page"><span class="nav-item-text">Real Estate Law</span><span class="sub-desc">Acquisition and disposition, leasing, land use and 1031 exchanges.</span></a></li>
+            <li><a href="/corporate"><span class="nav-item-text">Corporate Law</span><span class="sub-desc">Entity formation, governance and shareholder agreements.</span></a></li>
+            <li class="subnav-all"><a href="/practiceareas"><span class="nav-item-text">All practice areas</span></a></li>
           </ul>
         </li>
         <li><a href="/contact"><span class="nav-item-text">Contact</span></a></li>
@@ -118,12 +127,13 @@
   <nav aria-label="Mobile">
       <ul>
         <li><a href="/about"><span class="nav-item-text">About</span></a></li>
-        <li class="has-sub is-current">
+        <li class="has-sub has-mega is-current">
           <a href="/practiceareas" aria-current="page"><span class="nav-item-text">Practice Areas<span class="nav-chevron" aria-hidden="true"><svg viewBox="0 0 320 512" focusable="false"><path fill="currentColor" d="M143 352.3 7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"/></svg></span></span></a>
           <ul class="subnav" id="drawer-sub">
-            <li><a href="/business-law"><span class="nav-item-text">Business Law</span></a></li>
-            <li class="is-current"><a href="/real-estate" aria-current="page"><span class="nav-item-text">Real Estate Law</span></a></li>
-            <li><a href="/corporate"><span class="nav-item-text">Corporate Law</span></a></li>
+            <li><a href="/business-law"><span class="nav-item-text">Business Law</span><span class="sub-desc">General corporate counsel, financing, M&amp;A and business formation.</span></a></li>
+            <li class="is-current"><a href="/real-estate" aria-current="page"><span class="nav-item-text">Real Estate Law</span><span class="sub-desc">Acquisition and disposition, leasing, land use and 1031 exchanges.</span></a></li>
+            <li><a href="/corporate"><span class="nav-item-text">Corporate Law</span><span class="sub-desc">Entity formation, governance and shareholder agreements.</span></a></li>
+            <li class="subnav-all"><a href="/practiceareas"><span class="nav-item-text">All practice areas</span></a></li>
           </ul>
         </li>
         <li><a href="/contact"><span class="nav-item-text">Contact</span></a></li>
@@ -145,6 +155,7 @@
 
   <main id="main">
     <div class="page-hero page-hero--realestate" role="presentation"></div>
+    <div class="reveal-fx">
     <section class="row section--practice" aria-labelledby="re-heading">
       <div class="wrap">
         <div class="col c12 gutter-30">
@@ -167,14 +178,15 @@
       <div class="wrap">
         <div class="col c12">
           <h2 class="cta-title" id="cta-heading">Buying, selling or financing property?</h2>
-          <p class="cta-copy">Call to discuss your matter directly with Paul Rubell &mdash; no intake queue, no gatekeeping.</p>
+          <p class="cta-copy">Write or call to discuss your matter directly with Paul Rubell &mdash; no intake queue, no gatekeeping.</p>
           <p class="cta-actions">
-            <a class="btn btn--primary" href="tel:516-946-1706">Call 516-946-1706</a>
-            <a class="btn btn--ghost" href="mailto:paul@paulrubell.com">Email the firm</a>
+            <a class="btn btn--primary" href="mailto:paul@paulrubell.com">Email Paul@paulrubell.com</a>
+            <a class="btn btn--ghost" href="tel:516-946-1706">Call 516-946-1706</a>
           </p>
         </div>
       </div>
     </section>
+    </div>
   </main>
 
 <footer class="site-footer">
@@ -207,8 +219,7 @@
     <div class="wrap">
       <div class="col c12">
         <div class="copyright">
-          <div>&copy; 2026&nbsp;</div>
-          <div><p>Powered by <a href="http://www.craic.in" target="_blank" rel="noopener">Craic.in</a></p></div>
+          <div>&copy; 2026 Paul Rubell, Attorney At Law, P.C.</div>
         </div>
       </div>
     </div>

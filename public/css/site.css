@@ -205,7 +205,7 @@ button:focus-visible {
 /* --------------------------------------------------------------------------
    5. Utility bar
    -------------------------------------------------------------------------- */
-.topbar { padding: 5px 15px; background: var(--topbar-inner); }
+.topbar { padding: 5px 40px; background: var(--topbar-inner); }
 
 
 .topbar .social { text-align: left; }
@@ -236,7 +236,7 @@ button:focus-visible {
 /* One white nav band on every page. The old site used this on the homepage
    only and left the other six with an empty blue band. */
 .navrow {
-  padding: 0 0 10px;
+  padding: 0 40px 10px;
   background: #fff;
 }
 .navrow > .wrap > .col { padding-left: 0; padding-right: 0; }
@@ -246,9 +246,14 @@ button:focus-visible {
 }
 
 .brandbar { padding: 15px 0; }
-.brandbar .wrap { max-width: none; }
-.brandbar .badge-col { padding-left: 0; padding-right: 1.5%; }
-.brandbar .name-col  { padding: 0 0 2px; }
+.brandbar .wrap {
+  max-width: none;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 18px;
+}
+.brandbar .name-col  { width: auto; flex: 0 1 auto; padding: 0 0 2px; }
+.brandbar .badge-col { width: 80px; flex: 0 0 80px; padding: 0; }
 
 .badge-link { display: block; }
 .brand-link { display: block; }
@@ -284,7 +289,7 @@ button:focus-visible {
   display: flex;
   justify-content: flex-end;
   align-items: stretch;
-  position: relative;
+  position: static;
   width: calc(100% - 64px);
   max-width: 416px;
   padding: 12px 0;
@@ -396,7 +401,77 @@ button:focus-visible {
 }
 .mainnav .subnav > li > a:hover { color: var(--blue); }
 .mainnav .subnav > li.is-current > a { color: #fff; background: var(--blue); }
-.mainnav .subnav > li.is-current > a { color: #fff; background: var(--blue); }
+
+/* Mega panel. The drawer reuses this markup and renders it as a plain list,
+   so everything specific to the wide panel is scoped to .mainnav .has-mega.
+   The li goes position:static so the panel anchors to .mainnav and can be
+   wider than the "Practice Areas" item itself. */
+.mainnav > ul > li.has-mega { position: static; }
+.mainnav .has-mega > .subnav {
+  top: 100%;
+  left: auto;
+  right: 0;
+  margin-top: 10px;   /* .navrow's bottom padding: lands flush with the band */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 620px;
+  max-width: calc(100vw - 80px);
+  padding: 6px;
+  border-top: 3px solid var(--blue);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .14);
+}
+/* A transparent lip that spans the gap between the nav item and the panel, so
+   the pointer never crosses dead space on its way down. */
+.mainnav .has-mega > .subnav::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -42px;
+  height: 42px;
+}
+.mainnav .has-mega > .subnav > li { border-bottom: 0; }
+.mainnav .has-mega > .subnav > li > a {
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding: 14px 16px 16px;
+  border-radius: 3px;
+  white-space: normal;
+  transition: background-color .2s ease-out;
+}
+.mainnav .has-mega > .subnav > li > a:hover,
+.mainnav .has-mega > .subnav > li > a:focus-visible { background: var(--alt-bg); }
+.mainnav .has-mega > .subnav .nav-item-text { font-weight: 700; }
+.mainnav .has-mega .sub-desc {
+  display: block;
+  margin-top: 7px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: var(--gray-body);
+}
+.mainnav .has-mega > .subnav > li.is-current > a .sub-desc { color: #fff; }
+
+.mainnav .has-mega .subnav-all {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  border-top: 1px solid #e4e4e4;
+}
+.mainnav .has-mega > .subnav > li.subnav-all > a {
+  flex-direction: row;
+  align-items: center;
+  padding: 13px 16px;
+  font-size: 14px;
+  color: var(--blue);
+  white-space: nowrap;
+}
+.mainnav .has-mega > .subnav > li.subnav-all > a .nav-item-text { font-weight: 400; }
+.mainnav .has-mega > .subnav > li.subnav-all > a .nav-item-text::before,
+.mainnav .has-mega > .subnav > li.subnav-all > a .nav-item-text::after { content: none; }
+.mainnav .has-mega > .subnav > li.subnav-all > a::after { content: '\2192'; padding-left: 8px; }
 
 /* --------------------------------------------------------------------------
    8. Mobile header + drawer  (hidden until the small breakpoint)
@@ -980,16 +1055,31 @@ button:focus-visible {
   }
 }
 
-/* Card labels stay visible at every width. The old site hid them above 1025px
-   until hover, so desktop visitors saw three unlabelled photos. */
-.gallery-card { position: relative; }
-.gallery-card .caption { position: relative; padding: 15px; transition: background-color .25s ease-out; }
-.gallery-card:hover .caption,
-.gallery-card:focus-visible .caption,
-.gallery-card:focus-within .caption { background: #005c93; }
-.gallery-card .card-img { transition: transform .35s ease-out; }
-.gallery-card { overflow: hidden; }
-.gallery-card:hover .card-img { transform: scale(1.04); }
+/* Above 1025px the caption is a hover/focus overlay sitting on the image, the
+   way the old site had it: three photographs that reveal their practice area
+   on hover. Below that it stays under the image (block 13 above), so touch
+   visitors never lose the labels. The caption text is only made transparent,
+   never removed, so it still names the link for assistive technology. */
+@media (min-width: 1025px) {
+  .gallery-card { position: relative; overflow: hidden; }
+  .gallery-card .caption {
+    position: absolute;
+    inset: 0;
+    padding: 15px 25px;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity .3s ease-out, transform .3s ease-out;
+  }
+  .gallery-card:hover .caption,
+  .gallery-card:focus-visible .caption,
+  .gallery-card:focus-within .caption {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .gallery-card .card-img { transition: transform .45s ease-out; }
+  .gallery-card:hover .card-img,
+  .gallery-card:focus-within .card-img { transform: scale(1.04); }
+}
 
 /* --------------------------------------------------------------------------
    14. Small screens (≤ 767): the live site's mobile design
@@ -1100,6 +1190,10 @@ button:focus-visible {
     color: #fff;
   }
   .drawer .subnav { display: block; }
+  /* The mega panel's extras are desktop-only; the drawer's parent row already
+     reaches /practiceareas on its second tap. */
+  .drawer .sub-desc,
+  .drawer .subnav-all { display: none; }
 
   .drawer nav { padding-bottom: 15px; }
   .drawer .drawer-foot { display: flow-root; margin-top: auto; padding-bottom: 25px; }
@@ -1313,5 +1407,51 @@ button:focus-visible {
     animation-iteration-count: 1 !important;
     transition-duration: .001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   15. RevealFx "Mask Wipe" — the page entrance shared with the other projects.
+        A left-to-right mask wipe with a blur settle and a 6px rise. The inline
+        head script adds .reveal-arm before the first paint and swaps it for
+        .reveal-play on DOMContentLoaded; 700ms later it removes that too, so
+        no filter/transform survives to trap fixed-position descendants.
+   -------------------------------------------------------------------------- */
+.reveal-arm .reveal-fx,
+.reveal-play .reveal-fx {
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 25%, transparent 50%);
+          mask-image: linear-gradient(to right, #000 0%, #000 25%, transparent 50%);
+  -webkit-mask-size: 400% 100%;
+          mask-size: 400% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+.reveal-arm .reveal-fx {
+  -webkit-mask-position: 100% 0;
+          mask-position: 100% 0;
+  filter: blur(10px);
+  transform: translateY(6px);
+}
+.reveal-play .reveal-fx {
+  -webkit-mask-position: 0 0;
+          mask-position: 0 0;
+  filter: blur(0);
+  transform: translateY(0);
+  transition:
+    -webkit-mask-position .5s cubic-bezier(.25, .4, .25, 1),
+    mask-position .5s cubic-bezier(.25, .4, .25, 1),
+    filter .5s cubic-bezier(.25, .4, .25, 1),
+    transform .5s cubic-bezier(.25, .4, .25, 1);
+}
+/* Belt and braces: the head script already bails on reduce, but a mid-session
+   preference change must not leave anything masked. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-arm .reveal-fx,
+  .reveal-play .reveal-fx {
+    -webkit-mask-image: none;
+            mask-image: none;
+    filter: none;
+    transform: none;
+    transition: none;
   }
 }
