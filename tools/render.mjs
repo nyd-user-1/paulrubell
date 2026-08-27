@@ -632,7 +632,7 @@ const CTA = (lead) => `
 
 /* Vertical base offset per hero, in px, applied before the parallax drift.
    Tuned against each photograph: 0 keeps the top of the frame. */
-const HERO_BASE = { about: 0, litigation: -60, realestate: -190, corporate: -90 };
+const HERO_BASE = { about: 0, practiceareas: -60, realestate: -190, corporate: -90 };
 
 const heroBand = (mod) => {
   const mods = mod.split(' ');
@@ -688,7 +688,7 @@ function practiceAreasPage() {
     path: '/practiceareas',
     current: 'practiceareas',
     preload: [['card-business-640.jpg', 'card-business-1000.jpg', 'card-business-1440.jpg']],
-    hero: heroBand('litigation parallax'),
+    hero: heroBand('practiceareas parallax'),
     jsonld: [
       LEGAL_SERVICE,
       breadcrumb('Practice Areas', '/practiceareas'),

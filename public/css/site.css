@@ -784,7 +784,6 @@ button:focus-visible {
    against the viewport rather than the 238px band. Matches the live site. */
 .page-hero--parallax { background-attachment: fixed; }
 .page-hero--about { background-position: 50% -29.93px; }
-.page-hero--realestate { background-position: 50% 100%; }
 
 .section { padding: 80px 30px 30px; }
 .section--tail { padding: 0 30px 80px; }
@@ -846,76 +845,6 @@ button:focus-visible {
 
 .gutter-30 { padding: 0 30px !important; }
 
-/* Practice-areas "List of Services" -------------------------------------- */
-.services { width: 100%; }
-.services > li {
-  padding: 0 0 20px;
-  margin: 20px 0;
-  border-bottom: 1px solid #c0c0c0;
-}
-.services .biglink {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  position: relative;
-  min-height: 195px;
-  padding: 0;
-}
-.services .list-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 195px;
-  height: 195px;
-  background-color: #fff;
-  background-position: 50% 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-.services .list-text { width: 100%; padding: 0 15px 0 230px; }
-.services .item-name {
-  display: block;
-  max-width: 100%;
-  margin: 0 0 20px;
-  font-family: var(--mont);
-  font-size: 26px;
-  font-weight: 400;
-  color: var(--blue);
-  text-align: left;
-}
-.services .item-text {
-  display: inline-block;
-  max-width: 100%;
-  font-family: var(--sans);
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--gray-body);
-  white-space: pre-line;
-  text-align: left;
-}
-.services .link {
-  display: block;
-  width: 100%;
-  padding: 0 15px 0 230px;
-  margin: 10px 0 0;
-}
-.services .button-text {
-  display: block;
-  font-family: var(--sans);
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--blue);
-}
-.services .button-text::after {
-  content: '>>';
-  margin-left: 10px;
-  font-size: 14px;
-  color: var(--blue);
-}
-/* The stray "List Item N" labels are in the live markup but hidden. */
-.services .link .item-name { display: none; }
-.services .biglink:hover .button-text { text-decoration: underline; }
 
 /* Contact page blocks ----------------------------------------------------- */
 .contact-block .cb-body { padding: 2px 0; }
@@ -1346,9 +1275,7 @@ button:focus-visible {
 .hero-slide--1        { background-image: url(../images/hero-home-1920.jpg); }
 .hero-slide--2        { background-image: url(../images/hero-home-2-1920.jpg); }
 .page-hero--about     { background-image: url(../images/hero-about-1920.jpg); }
-.page-hero--litigation{ background-image: url(../images/card-business-1440.jpg); }
-.page-hero--realestate{ background-image: url(../images/hero-realestate-1920.jpg); }
-.page-hero--corporate { background-image: url(../images/hero-corporate-1920.jpg); }
+.page-hero--practiceareas{ background-image: url(../images/card-business-1440.jpg); }
 
 .card-img--business   { background-image: url(../images/card-business-1000.jpg); }
 .card-img--corporate  { background-image: url(../images/card-corporate-1000.jpg); }
@@ -1370,9 +1297,7 @@ button:focus-visible {
   .hero-slide--1        { background-image: url(../images/hero-home-1024.jpg); }
   .hero-slide--2        { background-image: url(../images/hero-home-2-1024.jpg); }
   .page-hero--about     { background-image: url(../images/hero-about-1024.jpg); }
-  .page-hero--litigation{ background-image: url(../images/card-business-1000.jpg); }
-  .page-hero--realestate{ background-image: url(../images/hero-realestate-1024.jpg); }
-  .page-hero--corporate { background-image: url(../images/hero-corporate-1024.jpg); }
+  .page-hero--practiceareas{ background-image: url(../images/card-business-1000.jpg); }
   .card-img--business   { background-image: url(../images/card-business-640.jpg); }
   .card-img--corporate  { background-image: url(../images/card-corporate-640.jpg); }
   .card-img--realestate { background-image: url(../images/card-realestate-640.jpg); }
@@ -1387,9 +1312,7 @@ button:focus-visible {
   .hero-slide--1        { background-image: url(../images/hero-home-640.jpg); }
   .hero-slide--2        { background-image: url(../images/hero-home-2-640.jpg); }
   .page-hero--about     { background-image: url(../images/hero-about-640.jpg); }
-  .page-hero--litigation{ background-image: url(../images/card-business-640.jpg); }
-  .page-hero--realestate{ background-image: url(../images/hero-realestate-640.jpg); }
-  .page-hero--corporate { background-image: url(../images/hero-corporate-640.jpg); }
+  .page-hero--practiceareas{ background-image: url(../images/card-business-640.jpg); }
   .card-img--business   { background-image: url(../images/card-business-640.jpg); }
   .card-img--corporate  { background-image: url(../images/card-corporate-640.jpg); }
   .card-img--realestate { background-image: url(../images/card-realestate-640.jpg); }
