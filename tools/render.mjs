@@ -629,12 +629,18 @@ const CTA = (lead) => `
           <h2 class="cta-title" id="cta-heading">${lead}</h2>
           <p class="cta-copy">Write or call to discuss your matter directly with Paul Rubell &mdash; no intake queue, no gatekeeping.</p>
           <p class="cta-actions">
-            <a class="btn btn--primary" href="${MAIL_HREF}">Email Paul@paulrubell.com</a>
-            <a class="btn btn--ghost" href="${TEL_HREF}">Call 516-946-1706</a>
+            <a class="btn btn--primary" href="${MAIL_HREF}">Email</a>
+            <a class="btn btn--ghost" href="${TEL_HREF}">Call</a>
           </p>
         </div>
       </div>
     </section>`;
+
+/* The hero carries .reveal-plate rather than .reveal-fx: a mask-only wipe with
+   no blur and no rise. Measured, not assumed — an ancestor filter (even
+   blur(0)) re-crops background-attachment: fixed, but a mask leaves it
+   untouched. Excluding the hero entirely, as it was, put the whole animation
+   below the fold once the band grew to 400px. */
 
 /* Vertical base offset per hero, in px, applied before the parallax drift.
    Tuned against each photograph: 0 keeps the top of the frame. */
@@ -643,7 +649,7 @@ const HERO_BASE = { about: 0, litigation: -60, realestate: -190, corporate: -90 
 const heroBand = (mod) => {
   const mods = mod.split(' ');
   const base = HERO_BASE[mods[0]] || 0;
-  return `    <div class="page-hero ${mods.map((m) => 'page-hero--' + m).join(' ')}"${base ? ` data-parallax-base="${base}"` : ''} role="presentation"></div>`;
+  return `    <div class="page-hero reveal-plate ${mods.map((m) => 'page-hero--' + m).join(' ')}"${base ? ` data-parallax-base="${base}"` : ''} role="presentation"></div>`;
 };
 
 /* ------------------------------------------------------------ page bodies */

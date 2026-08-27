@@ -1708,3 +1708,37 @@ button:focus-visible {
 .mainnav .has-mega > .subnav > li > a:focus-visible .sub-desc { color: var(--gray-333); }
 .mainnav .has-mega > .subnav > li > a:hover .nav-item-text,
 .mainnav .has-mega > .subnav > li > a:focus-visible .nav-item-text { color: #005c93; }
+
+/* --- reveal: the hero plate ----------------------------------------------
+   Same wipe as .reveal-fx, but mask only. A filter or transform on (or above)
+   the hero re-crops its background-attachment: fixed; a mask does not. This is
+   what lets the hero band wipe in with the rest of the page instead of sitting
+   the animation out. */
+.reveal-arm .reveal-plate,
+.reveal-play .reveal-plate {
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 25%, transparent 50%);
+          mask-image: linear-gradient(to right, #000 0%, #000 25%, transparent 50%);
+  -webkit-mask-size: 400% 100%;
+          mask-size: 400% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+.reveal-arm .reveal-plate {
+  -webkit-mask-position: 100% 0;
+          mask-position: 100% 0;
+}
+.reveal-play .reveal-plate {
+  -webkit-mask-position: 0 0;
+          mask-position: 0 0;
+  transition:
+    -webkit-mask-position .5s cubic-bezier(.25, .4, .25, 1),
+    mask-position .5s cubic-bezier(.25, .4, .25, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-arm .reveal-plate,
+  .reveal-play .reveal-plate {
+    -webkit-mask-image: none;
+            mask-image: none;
+    transition: none;
+  }
+}
