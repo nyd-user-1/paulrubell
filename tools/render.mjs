@@ -14,7 +14,40 @@ const OUT = join(ROOT, 'public');
 
 const SITE = 'https://www.paulrubell.com';
 const TITLE = 'Paul Rubell, Attorney At Law, P.C.';
-const DESC = 'A boutique law firm that practices at the intersection of business and technology .';
+const DESC = 'A boutique law firm that practices at the intersection of business and technology.';
+
+/* Per-page title and description. The old site shipped one identical pair on
+   every page, which gave search and answer engines nothing to tell them apart. */
+const META = {
+  '/': {
+    title: 'Paul Rubell, Attorney At Law, P.C. | Business & Technology Law, Melville NY',
+    desc: 'A boutique Long Island law firm practising at the intersection of business and technology. Mergers and acquisitions, venture capital, securities, real estate and privacy counsel.',
+  },
+  '/about': {
+    title: 'About Paul Rubell, Esq. | Business & Technology Attorney, Long Island',
+    desc: 'Paul Rubell is a national leader in technology and privacy law, advising companies, entrepreneurs and investors on M&A, private equity, venture capital, securities and governance.',
+  },
+  '/practiceareas': {
+    title: 'Practice Areas | Paul Rubell, Attorney At Law, P.C.',
+    desc: 'Business, corporate and real estate law for established and emerging companies, entrepreneurs and investors across New York and beyond.',
+  },
+  '/business-law': {
+    title: 'Business Law Attorney | Paul Rubell, Attorney At Law, P.C.',
+    desc: 'General corporate counsel, conventional and venture capital financing, M&A transactions and business formation for companies of every size, foreign and domestic.',
+  },
+  '/real-estate': {
+    title: 'Real Estate Law Attorney, Melville NY | Paul Rubell, Attorney At Law, P.C.',
+    desc: 'Commercial real estate counsel covering acquisition and disposition, financing, leasing, land use and 1031 exchanges across Long Island and the New York metropolitan area.',
+  },
+  '/corporate': {
+    title: 'Corporate Law Attorney | Paul Rubell, Attorney At Law, P.C.',
+    desc: 'Entity formation, governance, shareholder and operating agreements, and cross-border counsel for multinational companies and small businesses alike.',
+  },
+  '/contact': {
+    title: 'Contact | Paul Rubell, Attorney At Law, P.C. — Melville, New York',
+    desc: 'Reach Paul Rubell, Attorney At Law, P.C. at 48 South Service Road, Suite 300, Melville, NY 11747. Call 516-946-1706 or email paul@paulrubell.com.',
+  },
+};
 const KEYWORDS =
   'paul rubell, privacy law, business law, corporate law, long island law, attorney at law, ' +
   'tech law, meltzer lippe, abrams fensterman, employment law, boutique law firm, attorney, legal, ' +
@@ -69,7 +102,7 @@ const LEGAL_SERVICE = {
     '@type': 'OfferCatalog',
     name: 'Practice Areas',
     itemListElement: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Business Law', url: `${SITE}/Litigation` } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Business Law', url: `${SITE}/business-law` } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Corporate Law', url: `${SITE}/corporate` } },
       { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Real Estate Law', url: `${SITE}/real-estate` } },
     ],
@@ -115,6 +148,7 @@ const breadcrumb = (name, path) => ({
 /* ----------------------------------------------------------------- head -- */
 function head({ path, preload = [], jsonld = [] }) {
   const canonical = `${SITE}${path}`;
+  const { title, desc } = META[path];
   const preloads = preload
     .map(([sm, md, lg]) => `  <link rel="preload" as="image" href="/images/${sm}" media="(max-width: 767px)" fetchpriority="high">
   <link rel="preload" as="image" href="/images/${md}" media="(min-width: 768px) and (max-width: 1024px)" fetchpriority="high">
@@ -128,8 +162,8 @@ function head({ path, preload = [], jsonld = [] }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-  <title>${TITLE}</title>
-  <meta name="description" content="${DESC}">
+  <title>${title}</title>
+  <meta name="description" content="${desc}">
   <meta name="keywords" content="${KEYWORDS}">
   <link rel="canonical" href="${canonical}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -144,19 +178,20 @@ function head({ path, preload = [], jsonld = [] }) {
   <meta property="og:site_name" content="${TITLE}">
   <meta property="og:locale" content="en_US">
   <meta property="og:url" content="${canonical}">
-  <meta property="og:title" content="${TITLE}">
-  <meta property="og:description" content="${DESC}">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${desc}">
   <meta property="og:image" content="${OG_IMAGE}">
   <meta property="og:image:width" content="200">
   <meta property="og:image:height" content="200">
   <meta property="og:image:alt" content="Paul Rubell, Attorney At Law, P.C.">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="${TITLE}">
-  <meta name="twitter:description" content="${DESC}">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${desc}">
   <meta name="twitter:image" content="${OG_IMAGE}">
 
   <link rel="manifest" href="/manifest.json">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon-57.png">
 
@@ -174,15 +209,15 @@ const NAV_ITEMS = [
   {
     label: 'Practice Areas', href: '/practiceareas', key: 'practiceareas',
     sub: [
-      { label: 'Business', href: '/Litigation', key: 'Litigation' },
-      { label: 'Real Estate', href: '/real-estate', key: 'real-estate' },
-      { label: 'Corporate', href: '/corporate', key: 'corporate' },
+      { label: 'Business Law', href: '/business-law', key: 'business-law' },
+      { label: 'Real Estate Law', href: '/real-estate', key: 'real-estate' },
+      { label: 'Corporate Law', href: '/corporate', key: 'corporate' },
     ],
   },
   { label: 'Contact', href: '/contact', key: 'contact' },
 ];
 
-const PA_CHILDREN = ['Litigation', 'real-estate', 'corporate'];
+const PA_CHILDREN = ['business-law', 'real-estate', 'corporate'];
 
 function navList(current, { id, cls, noToggle }) {
   const items = NAV_ITEMS.map((it) => {
@@ -245,8 +280,10 @@ ${navList(current, { id: 'drawer', cls: '', noToggle: true })}
 <div class="drawer-overlay" hidden-aria></div>`;
 }
 
-/** Interior-page header: dark utility strip + solid blue nav band. */
-function headerInner(current) {
+/** One header for every page: dark utility strip, then a white band carrying
+    the badge, wordmark and navigation. The old site used this on the homepage
+    only and left the other six with an empty blue band. */
+function siteHeader(current) {
   return `<header class="site-header">
 ${mobileHeader()}
   <div class="row topbar">
@@ -254,14 +291,30 @@ ${mobileHeader()}
       <div class="col c6 social">
         <a href="mailto:paul@paulrubell.com" aria-label="Email Paul Rubell">${ICON_MAIL()}</a>
       </div>
-      <div class="col c6">
-        <p class="contact-line"><span>paul@paulrubell</span><a href="mailto:Paul@paulrubell.com">.com</a><span> <span>/ 516.946.1706</span></span></p>
+      <div class="col c6 contact-col">
+        <p class="contact-line"><a href="mailto:paul@paulrubell.com">paul@paulrubell.com</a><span> <span>/ 516-946-1706</span></span></p>
       </div>
     </div>
   </div>
   <div class="row navrow">
     <div class="wrap">
-      <div class="col c6 brand-col"></div>
+      <div class="col c6">
+        <div class="row brandbar">
+          <div class="wrap">
+            <div class="col c2 badge-col">
+              <a class="badge-link" href="/" aria-label="Paul Rubell, Attorney At Law, P.C. — home">
+                <img class="badge-img" src="/images/superlawyers-badge.png" width="344" height="286" alt="Rated by Super Lawyers &mdash; Paul Rubell, SuperLawyers.com">
+              </a>
+            </div>
+            <div class="col c10 name-col">
+              <a class="brand-link" href="/">
+                <span class="brand-name">Paul Rubell</span>
+                <span class="brand-sub">Attorney At Law, P.C.</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="col c6 nav-col">
         <nav class="mainnav" aria-label="Primary">
 ${navList(current, { id: 'main', cls: '' })}
@@ -271,48 +324,6 @@ ${navList(current, { id: 'main', cls: '' })}
   </div>
 </header>
 ${drawer(current)}`;
-}
-
-/** Home header: dark utility strip + white band with the badge and wordmark. */
-function headerHome() {
-  return `<header class="site-header">
-${mobileHeader()}
-  <div class="row topbar topbar--home">
-    <div class="wrap">
-      <div class="col c6 social">
-        <a href="mailto:paul@paulrubell.com" aria-label="Email Paul Rubell">${ICON_MAIL()}</a>
-      </div>
-      <div class="col c6 contact-col">
-        <p class="contact-line"><a href="mailto:Paul@paulrubell.com">Paul@paulrubell.com</a><span> <span>/ 516-946-1706</span></span></p>
-      </div>
-    </div>
-  </div>
-  <div class="row navrow--home">
-    <div class="wrap">
-      <div class="col c6">
-        <div class="row brandbar">
-          <div class="wrap">
-            <div class="col c2 badge-col">
-              <span class="badge-link">
-                <img class="badge-img" src="/images/superlawyers-badge.png" width="344" height="286" alt="Rated by Super Lawyers &mdash; Paul Rubell, SuperLawyers.com">
-              </span>
-            </div>
-            <div class="col c10 name-col">
-              <p class="brand-name">Paul Rubell</p>
-              <p class="brand-sub">Attorney At Law, P.C.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col c6">
-        <nav class="mainnav mainnav--home" aria-label="Primary">
-${navList('home', { id: 'main', cls: '' })}
-        </nav>
-      </div>
-    </div>
-  </div>
-</header>
-${drawer('home')}`;
 }
 
 /* --------------------------------------------------------------- footer -- */
@@ -364,7 +375,7 @@ const TAIL = `<script src="/js/site.js" defer></script>
 /* ------------------------------------------------------------- page: / -- */
 const CARDS = [
   {
-    href: '/Litigation', title: 'Business Law',
+    href: '/business-law', title: 'Business Law',
     text: 'Business disputes are part of every business. We help you protect your best interests.',
     img: 'card-business', widths: [440, 640, 1000, 1440],
   },
@@ -465,7 +476,7 @@ function homePage() {
 <body class="page-home">
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="site">
-${headerHome()}
+${siteHeader('home')}
 
   <main id="main">
 
@@ -544,7 +555,7 @@ function interiorPage({ path, current, preload, hero, jsonld, main }) {
 <body class="page-inner">
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="site">
-${headerInner(current)}
+${siteHeader(current)}
 
   <main id="main">
 ${hero || ''}
@@ -555,6 +566,21 @@ ${footer()}
 </div>
 ${TAIL}`;
 }
+
+/** Shared closing call to action. The old site had no CTA on desktop at all. */
+const CTA = (lead) => `
+    <section class="row section--cta" aria-labelledby="cta-heading">
+      <div class="wrap">
+        <div class="col c12">
+          <h2 class="cta-title" id="cta-heading">${lead}</h2>
+          <p class="cta-copy">Call to discuss your matter directly with Paul Rubell &mdash; no intake queue, no gatekeeping.</p>
+          <p class="cta-actions">
+            <a class="btn btn--primary" href="${TEL_HREF}">Call 516-946-1706</a>
+            <a class="btn btn--ghost" href="mailto:paul@paulrubell.com">Email the firm</a>
+          </p>
+        </div>
+      </div>
+    </section>`;
 
 const heroBand = (mod) =>
   `    <div class="page-hero ${mod.split(' ').map((m) => 'page-hero--' + m).join(' ')}" role="presentation"></div>`;
@@ -597,19 +623,25 @@ function aboutPage() {
           </div>
         </div>
       </div>
-    </section>`,
+    </section>
+${CTA('Ready to talk it through?')}`,
   });
 }
 
 function practiceAreasPage() {
   const items = [
     {
-      href: '/real-estate', name: 'Real Estate', img: 'card-realestate', widths: [440, 640, 1000],
+      href: '/business-law', name: 'Business Law', img: 'card-business', widths: [440, 640, 1000],
+      text: 'General corporate counsel, financing, M&A transactions and business formation for clients big and small, foreign and domestic.',
+      stray: '',
+    },
+    {
+      href: '/real-estate', name: 'Real Estate Law', img: 'card-realestate', widths: [440, 640, 1000],
       text: 'Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, and more.',
       stray: 'List Item  3',
     },
     {
-      href: '/corporate', name: 'Corporate', img: 'card-corporate', widths: [440, 640, 1000],
+      href: '/corporate', name: 'Corporate Law', img: 'card-corporate', widths: [440, 640, 1000],
       text: 'We represent both foreign and domestic companies to ensure the legal passage of goods, services, capital and more across borders.',
       stray: 'List Item  4',
     },
@@ -622,7 +654,6 @@ function practiceAreasPage() {
                 </span>
                 <span class="link">
                   <span class="button-text">Learn More</span>
-                  <span class="item-name">${it.stray}</span>
                 </span>
               </a>
             </li>`).join('\n');
@@ -651,19 +682,20 @@ ${items}
           </ul>
         </div>
       </div>
-    </section>`,
+    </section>
+${CTA('Not sure which area fits?')}`,
   });
 }
 
-function litigationPage() {
+function businessLawPage() {
   return interiorPage({
-    path: '/Litigation',
-    current: 'Litigation',
+    path: '/business-law',
+    current: 'business-law',
     preload: [['card-business-640.jpg', 'card-business-1000.jpg', 'card-business-1440.jpg']],
     jsonld: [
       LEGAL_SERVICE,
-      breadcrumb('Business', '/Litigation'),
-      { '@context': 'https://schema.org', '@type': 'Service', name: 'Business Law', serviceType: 'Business Law', url: `${SITE}/Litigation`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
+      breadcrumb('Business Law', '/business-law'),
+      { '@context': 'https://schema.org', '@type': 'Service', name: 'Business Law', serviceType: 'Business Law', url: `${SITE}/business-law`, provider: { '@id': `${SITE}/#organization` }, areaServed: { '@type': 'State', name: 'New York' } },
     ],
     hero: `    <div class="page-hero page-hero--litigation" role="presentation"></div>`,
     main: `    <section class="row section--practice" aria-labelledby="biz-heading">
@@ -681,7 +713,8 @@ function litigationPage() {
           </div>
         </div>
       </div>
-    </section>`,
+    </section>
+${CTA('Have a transaction in front of you?')}`,
   });
 }
 
@@ -703,10 +736,17 @@ function realEstatePage() {
           <div class="divider divider--left divider--thick"><hr></div>
           <div class="prose prose--16">
             <p>Draw upon our full complement of services and expertise to help you through land acquisition and disposition, ownership and transactions, financing, land use planning and more. We take a proactive approach to developing and implementing solutions to your distinct challenges to help you manage your real estate assets.</p>
+            <p><b class="subhead">Acquisition and Disposition</b><br>We represent purchasers and sellers of commercial property through every stage of a transaction &mdash; letters of intent, contract negotiation, due diligence, title and survey review, and closing. We structure deals to protect your position on price, contingencies and timing, and we identify the problems that surface in diligence before they become obstacles at the table.</p>
+            <p><b class="subhead">Financing</b><br>We act for both borrowers and institutional lenders in mortgage financing, construction loans, mezzanine debt and refinancing. Our work covers loan commitments, security instruments, guaranties, intercreditor and subordination agreements, and the estoppels and consents a lender will require before it funds.</p>
+            <p><b class="subhead">Leasing</b><br>We negotiate office, retail and industrial leases for landlords and tenants, including build-out and tenant improvement allowances, escalation and pass-through provisions, assignment and subletting, options to renew or expand, and the surrender and restoration obligations that decide how a tenancy ends.</p>
+            <p><b class="subhead">Land Use and Development</b><br>We guide owners and developers through zoning analysis, variances and special permits, site plan approval, subdivision, and appearances before municipal boards. We work alongside your architects, engineers and planners so the legal path and the design track advance together rather than in sequence.</p>
+            <p><b class="subhead">1031 Exchanges</b><br>We structure like-kind exchanges to defer capital gains on investment property, coordinating with qualified intermediaries and your tax advisors to keep identification and closing inside the statutory deadlines. We also handle reverse and improvement exchanges where the replacement property must be acquired first.</p>
+            <p><b class="subhead">Entity Structuring and Joint Ventures</b><br>We form the holding companies, single-purpose entities and joint ventures through which real estate is owned, and draft the operating agreements that govern capital contributions, distributions, control, transfer restrictions and exit. Getting the structure right at acquisition is what makes a clean disposition possible years later.</p>
           </div>
         </div>
       </div>
-    </section>`,
+    </section>
+${CTA('Buying, selling or financing property?')}`,
   });
 }
 
@@ -728,10 +768,17 @@ function corporatePage() {
           <div class="divider divider--left divider--thick"><hr></div>
           <div class="prose prose--16">
             <p>We help create business entities, such as corporations, partnerships and joint ventures. We also represent both foreign and domestic companies to ensure the legal passage of goods, services, capital and more across borders. Our clients include multinational companies as well as small businesses.</p>
+            <p><b class="subhead">Entity Formation</b><br>We select and form the right vehicle for the business you actually intend to run &mdash; C corporation, S corporation, limited liability company, limited partnership or joint venture &mdash; weighing tax treatment, investor expectations, liability protection and the cost of ongoing compliance. We handle incorporation, qualification in additional states, and the organisational records that lenders and investors will later ask to see.</p>
+            <p><b class="subhead">Governance</b><br>We prepare and maintain bylaws, operating agreements, board and shareholder consents, committee charters and minute books, and we advise directors and officers on fiduciary duties, conflicts of interest, indemnification and the mechanics of acting properly as a board. Good governance is inexpensive to maintain and very expensive to reconstruct.</p>
+            <p><b class="subhead">Shareholder and Operating Agreements</b><br>We draft the agreements that decide what happens when owners disagree: voting and control, transfer restrictions, rights of first refusal, tag-along and drag-along rights, buy-sell provisions, valuation mechanics, and departure on death, disability or dispute. These provisions are negotiated best while everyone is still on good terms.</p>
+            <p><b class="subhead">Commercial Contracts</b><br>We negotiate the agreements a company runs on &mdash; supply and distribution, licensing, services and SaaS, manufacturing, non-disclosure and employment &mdash; with attention to indemnification, limitation of liability, intellectual property ownership, data protection and termination rights.</p>
+            <p><b class="subhead">Cross-Border Counsel</b><br>We represent foreign companies establishing a United States presence and domestic companies expanding abroad, covering entity selection, distribution and agency arrangements, cross-border supply terms, and the movement of goods, services and capital between jurisdictions.</p>
+            <p><b class="subhead">Corporate Transactions</b><br>We handle stock and asset purchases, mergers, reorganisations, recapitalisations and dissolutions, from letter of intent and diligence through definitive documents, closing and post-closing adjustments &mdash; including the consents and third-party approvals that most often determine whether a deal closes on schedule.</p>
           </div>
         </div>
       </div>
-    </section>`,
+    </section>
+${CTA('Forming or restructuring a company?')}`,
   });
 }
 
@@ -758,8 +805,8 @@ function contactPage() {
       <div class="wrap">
         <div class="col c4 contact-block contact-block--phone">
           <div class="cb-body">
-            <p><strong>Phone</strong><span>&#65279;</span></p>
-            <p><span>516.946.1706</span></p>
+            <p><strong>Phone</strong></p>
+            <p><a href="${TEL_HREF}">516-946-1706</a></p>
           </div>
         </div>
         <div class="col c4 contact-block contact-block--address">
@@ -768,8 +815,7 @@ function contactPage() {
             <p><span>48 South Service Road</span></p>
             <p><span>Suite 300</span></p>
             <p><span>Melville, New York 11747</span></p>
-            <p><span><br></span></p>
-            <p><br></p>
+            <p class="directions"><a href="https://maps.google.com/?q=48+South+Service+Road+Suite+300+Melville+NY+11747" target="_blank" rel="noopener">Get directions</a></p>
           </div>
         </div>
         <div class="col c4 contact-block contact-block--email">
@@ -793,7 +839,7 @@ const PAGES = [
   ['index.html', homePage()],
   ['about.html', aboutPage()],
   ['practiceareas.html', practiceAreasPage()],
-  ['Litigation.html', litigationPage()],
+  ['business-law.html', businessLawPage()],
   ['real-estate.html', realEstatePage()],
   ['corporate.html', corporatePage()],
   ['contact.html', contactPage()],

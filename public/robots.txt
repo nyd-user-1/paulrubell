@@ -27,3 +27,7 @@ User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://www.paulrubell.com/sitemap.xml
+
+# Plain-text summaries for answer engines
+# https://www.paulrubell.com/llms.txt
+# https://www.paulrubell.com/llms-full.txt

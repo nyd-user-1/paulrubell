@@ -12,7 +12,7 @@ His writings have been published frequently in the New York Law Journal and othe
 
 ## Practice areas
 
-- **Business law** (/Litigation): general corporate counsel, conventional financing, venture capital financing, M&A transactions, business formation, shareholder disputes and litigation strategy.
+- **Business law** (/business-law): general corporate counsel, conventional financing, venture capital financing, M&A transactions, business formation, shareholder disputes and litigation strategy.
 - **Corporate law** (/corporate): forming business entities including corporations, partnerships and joint ventures; representing foreign and domestic companies in cross-border movement of goods, services and capital. Clients range from multinational companies to small businesses.
 - **Real estate law** (/real-estate): land acquisition and disposition, ownership and transactions, financing, land use planning, and management of real estate assets.
 - **Technology and privacy law**: domestic and international privacy regimes, cybersecurity, encryption, blockchain, AR, 3D printing, robotics, space exploration.
@@ -44,7 +44,7 @@ To provide each and every client with skilled legal advice in a timely and effic
 - [Home](https://www.paulrubell.com/): firm overview, practice areas, highlighted transactions.
 - [About](https://www.paulrubell.com/about): Paul Rubell's background, experience and the firm's mission.
 - [Practice Areas](https://www.paulrubell.com/practiceareas): index of the firm's services.
-- [Business](https://www.paulrubell.com/Litigation): business law detail (note the capital "L" in the URL).
+- [Business](https://www.paulrubell.com/business-law): business law detail ().
 - [Real Estate](https://www.paulrubell.com/real-estate): real estate law detail.
 - [Corporate](https://www.paulrubell.com/corporate): corporate law detail.
 - [Contact](https://www.paulrubell.com/contact): phone, address and email.

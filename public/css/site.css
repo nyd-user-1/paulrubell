@@ -83,7 +83,9 @@
   --blue-badge: #0367a6;    /* rgb(3,103,166)   Super Lawyers badge border   */
   --dark: #272725;          /* rgb(39,39,37)    footer + home utility bar    */
   --topbar-inner: #2e2e2e;  /* rgb(46,46,46)    interior utility bar         */
-  --gray-body: #888a8c;     /* rgb(136,138,140) default body copy            */
+  --gray-body: #6e7072;     /* body copy - 4.97:1 on white (was #888a8c, 3.46) */
+  --footer-link: #3f9fe0;   /* 5.16:1 on the dark footer (was #0075bb, 3.04)   */
+  --footer-muted: #9a9c9e;  /* 5.43:1 on the dark footer (was #888a8c, 4.32)   */
   --gray-333: #333333;
   --nav-dark: #2f313d;      /* rgb(47,49,61)    home nav + dropdown items    */
   --contact-ink: #3c3e47;   /* rgb(60,62,71)    contact page blocks          */
@@ -148,7 +150,7 @@ button:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
-.navrow a:focus-visible,
+.m-header a:focus-visible,
 .drawer a:focus-visible,
 .m-header a:focus-visible,
 .m-header button:focus-visible,
@@ -180,7 +182,9 @@ button:focus-visible {
   flex-wrap: wrap;
   position: relative;
 }
-.row--full > .wrap { max-width: 100%; }
+/* Homepage sections previously ran full-bleed; they now share the 960px
+   column the interior pages use. */
+.row--full > .wrap { max-width: 960px; }
 
 .col { position: relative; width: 100%; }
 .c2  { width: 16.66667%; }
@@ -202,14 +206,14 @@ button:focus-visible {
    5. Utility bar
    -------------------------------------------------------------------------- */
 .topbar { padding: 5px 15px; background: var(--topbar-inner); }
-.topbar--home { padding: 5px 0; background: var(--dark); }
+
 
 .topbar .social { text-align: left; }
 .topbar .social a { display: inline-block; margin-right: 3px; }
-.topbar--home .social a { margin-right: 10px; }
+
 
 .icon-mail { width: 23px; height: 23px; color: #fff; }
-.topbar--home .icon-mail { width: 20px; height: 20px; }
+
 
 .topbar .contact-line {
   padding: 2px 0;
@@ -219,40 +223,27 @@ button:focus-visible {
   text-align: right;
   color: #fff;
 }
-.topbar .contact-line a { color: var(--blue); }
+.topbar .contact-line a { color: var(--footer-link); }
 .topbar .contact-line a:hover { text-decoration: underline; }
 
-/* The home utility bar sits 14px past the 960px column, exactly as on the
-   live site (its paragraph is 100% wide with a negative-ish left offset). */
-.topbar--home .contact-col { padding-left: 0 !important; padding-right: 0 !important; }
-.topbar--home .contact-line {
-  width: 100%;
-  margin-left: calc(100% - 466px);
-}
+.topbar .contact-col { padding-left: 0 !important; }
 
 /* --------------------------------------------------------------------------
    6. Header rows
    -------------------------------------------------------------------------- */
 /* Interior pages: solid blue band, nav right, brand column intentionally
    empty (the live site leaves it empty on every page but the home page). */
+/* One white nav band on every page. The old site used this on the homepage
+   only and left the other six with an empty blue band. */
 .navrow {
-  padding: 15px;
-  background: var(--blue);
-}
-/* The live site reserves 160px of flow for a 168px header, so the nav band
-   overlaps the top of the page hero by 8px. Desktop layout only. */
-@media (min-width: 768px) {
-  .page-inner .site-header { position: relative; z-index: 2; margin-bottom: -8px; }
-}
-.navrow .brand-col { min-height: 100px; }
-.navrow .nav-col { padding-left: 10px !important; padding-right: 0 !important; }
-
-/* Home: white band carrying the badge + wordmark, nav right. */
-.navrow--home {
   padding: 0 0 10px;
   background: #fff;
 }
-.navrow--home > .wrap > .col { padding-left: 0; padding-right: 0; }
+.navrow > .wrap > .col { padding-left: 0; padding-right: 0; }
+.navrow .nav-col { padding-left: 0 !important; padding-right: 0 !important; }
+@media (min-width: 768px) {
+  .page-inner .site-header { position: relative; z-index: 2; }
+}
 
 .brandbar { padding: 15px 0; }
 .brandbar .wrap { max-width: none; }
@@ -260,6 +251,9 @@ button:focus-visible {
 .brandbar .name-col  { padding: 0 0 2px; }
 
 .badge-link { display: block; }
+.brand-link { display: block; }
+.brand-link:hover .brand-name { color: var(--blue); }
+.brand-name, .brand-sub { display: block; }
 .badge-img {
   width: 100%;
   height: auto;
@@ -291,11 +285,6 @@ button:focus-visible {
   justify-content: flex-end;
   align-items: stretch;
   position: relative;
-  width: 100%;
-  padding: 12px 0 12px 15px;
-  margin: 23px 0 0;
-}
-.mainnav--home {
   width: calc(100% - 64px);
   max-width: 416px;
   padding: 12px 0;
@@ -322,9 +311,9 @@ button:focus-visible {
   font-size: 14px;
   font-weight: 400;
   letter-spacing: .03em;
-  color: #fff;
+  color: var(--nav-dark);
 }
-.mainnav--home > ul > li > a { color: var(--nav-dark); }
+.mainnav > ul > li > a:hover { color: var(--blue); }
 
 .mainnav .nav-item-text { display: block; white-space: nowrap; }
 
@@ -407,7 +396,7 @@ button:focus-visible {
 }
 .mainnav .subnav > li > a:hover { color: var(--blue); }
 .mainnav .subnav > li.is-current > a { color: #fff; background: var(--blue); }
-.mainnav--home .subnav > li.is-current > a { color: var(--blue); background: transparent; }
+.mainnav .subnav > li.is-current > a { color: #fff; background: var(--blue); }
 
 /* --------------------------------------------------------------------------
    8. Mobile header + drawer  (hidden until the small breakpoint)
@@ -483,7 +472,11 @@ button:focus-visible {
 .hero .tagline span { font-weight: 300; color: #fff; }
 
 .btn-call {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 57px;
+  width: 315px;
   position: relative;
   max-width: 100%;
   margin: 45px 0 10px;
@@ -621,6 +614,11 @@ button:focus-visible {
 /* Highlighted transactions ----------------------------------------------- */
 .transactions { padding: 60px 40px; background: #fff; }
 .transactions .intro-col { padding: 0 16px 16px !important; }
+@media (min-width: 768px) {
+  .transactions .intro-col > div,
+  .transactions .intro-col > h2 { position: relative; }
+  .transactions .intro-col { align-self: flex-start; position: sticky; top: 24px; }
+}
 .transactions .intro-col h2 {
   max-width: 480.64px;
   margin: 0 0 16px;
@@ -740,7 +738,7 @@ button:focus-visible {
   padding: 2px 0;
   font-family: var(--sans);
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--gray-body);
   text-align: left;
 }
@@ -868,6 +866,41 @@ button:focus-visible {
 }
 .contact-social svg { width: 20px; height: 25px; }
 
+/* Closing call to action ---------------------------------------------------- */
+.section--cta { padding: 0 30px 80px; }
+.cta-title {
+  font-family: var(--mont);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--nav-dark);
+}
+.cta-copy {
+  margin: 10px 0 0;
+  font-family: var(--sans);
+  font-size: 16px;
+  color: var(--gray-body);
+}
+.cta-actions { margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 26px;
+  border-radius: 50px;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color .2s ease-out, color .2s ease-out;
+}
+.btn--primary { background: var(--blue); color: #fff; border: 2px solid var(--blue); }
+.btn--primary:hover { background: #005c93; border-color: #005c93; }
+.btn--ghost { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+.btn--ghost:hover { background: var(--blue); color: #fff; }
+.contact-block .directions { margin-top: 10px; }
+.contact-block .directions a { color: var(--blue); text-decoration: underline; }
+
 /* --------------------------------------------------------------------------
    12. Footer
    -------------------------------------------------------------------------- */
@@ -902,7 +935,7 @@ button:focus-visible {
   font-family: var(--mont);
   font-size: 22px;
   font-weight: 400;
-  color: var(--blue);
+  color: var(--footer-link);
   text-align: right;
 }
 .footer-address { margin: 8px 0; }
@@ -915,7 +948,11 @@ button:focus-visible {
   text-align: right;
 }
 .footer-links { margin: 8px 0; }
-.footer-links a { color: var(--blue); }
+/* Tap targets: the bare 22px-tall links were below the 24px minimum and sat
+   flush against each other. */
+.footer-links p + p { margin-top: 6px; }
+.footer-links a { display: inline-block; padding: 3px 0; }
+.footer-links a { color: var(--footer-link); }
 .footer-links a:hover { text-decoration: underline; }
 .footer-links .mail { font-style: italic; }
 
@@ -927,11 +964,10 @@ button:focus-visible {
   font-family: var(--sans);
   font-size: 13px;
   font-weight: 400;
-  color: var(--gray-body);
+  color: var(--footer-muted);
   text-align: center;
 }
-.copyright a { color: var(--blue); }
-.copyright a:hover { text-decoration: underline; }
+.copyright a { color: var(--footer-link); text-decoration: underline; }
 
 /* --------------------------------------------------------------------------
    13. Medium screens (768 – 1024): the gallery caption stops being a hover
@@ -944,22 +980,16 @@ button:focus-visible {
   }
 }
 
-@media (min-width: 1025px) {
-  .gallery-card { position: relative; }
-  .gallery-card .caption {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transform: scale(1.05);
-    transition: .3s ease-out;
-  }
-  .gallery-card:hover .caption,
-  .gallery-card:focus-visible .caption,
-  .gallery-card:focus-within .caption {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
+/* Card labels stay visible at every width. The old site hid them above 1025px
+   until hover, so desktop visitors saw three unlabelled photos. */
+.gallery-card { position: relative; }
+.gallery-card .caption { position: relative; padding: 15px; transition: background-color .25s ease-out; }
+.gallery-card:hover .caption,
+.gallery-card:focus-visible .caption,
+.gallery-card:focus-within .caption { background: #005c93; }
+.gallery-card .card-img { transition: transform .35s ease-out; }
+.gallery-card { overflow: hidden; }
+.gallery-card:hover .card-img { transform: scale(1.04); }
 
 /* --------------------------------------------------------------------------
    14. Small screens (≤ 767): the live site's mobile design
@@ -1183,7 +1213,7 @@ button:focus-visible {
   .services .item-name { margin: 0; font-size: 14px; font-weight: 700; }
   .services .item-text { font-size: 14px; }
   .services .link { padding: 0 0 0 35%; margin: 0; }
-  .services .button-text { padding: 5px 0; font-size: 14px; line-height: .8; color: #828383; }
+  .services .button-text { padding: 5px 0; font-size: 14px; line-height: .8; color: var(--gray-body); }
   .services .button-text::after { content: none; }
 
   .contact-block { width: 100%; padding: 0 15px !important; margin: 0; }
@@ -1204,8 +1234,10 @@ button:focus-visible {
   .footer-brand p { font-size: 15px; }
   .footer-badge { margin-top: 22px; text-align: center; }
   .footer-badge img { width: 185px; margin: 0 auto; }
-  .footer-contact .contact-head,
-  .footer-address { display: none; }
+  /* The old site hid the street address on phones; it stays visible now. */
+  .footer-contact .contact-head { display: none; }
+  .footer-address { margin: 8px 0; text-align: center; }
+  .footer-address p { text-align: center; }
   .footer-links { margin: 8px 0; padding: 2px 0; text-align: center; }
   .footer-links p { text-align: center; }
   .footer-legal { padding: 15px 0; }
@@ -1228,6 +1260,7 @@ button:focus-visible {
 .card-img--corporate  { background-image: url(../images/card-corporate-1000.jpg); }
 .card-img--realestate { background-image: url(../images/card-realestate-1000.jpg); }
 
+.list-image--business   { background-image: url(../images/card-business-640.jpg); }
 .list-image--realestate { background-image: url(../images/card-realestate-640.jpg); }
 .list-image--corporate  { background-image: url(../images/card-corporate-640.jpg); }
 
