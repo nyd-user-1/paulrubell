@@ -2,7 +2,7 @@
 /**
  * Renders the seven static pages in /public from the shared header/footer
  * partials below. This is a convenience for keeping the chrome in sync — the
- * committed HTML in /public is the deployable artifact and Vercel runs no
+ * committed HTML in /public is the deployable artifact and Amplify runs no
  * build step. Run with:  node tools/render.mjs
  */
 import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';

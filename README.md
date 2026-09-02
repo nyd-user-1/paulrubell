@@ -1,14 +1,14 @@
 # paulrubell.com
 
-Static rebuild of **www.paulrubell.com** (previously on Duda), deployed on Vercel.
+Static rebuild of **www.paulrubell.com** (previously on Duda), deployed on AWS Amplify.
 
 Plain HTML + one stylesheet + ~90 lines of vanilla JS. No framework, no build step
-at deploy time — Vercel serves `public/` as-is.
+at deploy time — Amplify serves `public/` as-is.
 
 ## Layout
 
 ```
-public/                 deployable output (Vercel outputDirectory)
+public/                 deployable output (Amplify baseDirectory)
   index.html            /
   about.html            /about
   practiceareas.html    /practiceareas
@@ -19,12 +19,14 @@ public/                 deployable output (Vercel outputDirectory)
   images/               self-hosted imagery at three widths per breakpoint
   robots.txt sitemap.xml llms.txt llms-full.txt manifest.json favicon.ico
 tools/render.mjs        regenerates the four pages from shared header/footer partials
-vercel.json             clean URLs, redirects, cache + security headers
+amplify.yml             build spec: no build step, serve public/
+customHttp.yml          cache + security headers
 ```
 
-`cleanUrls` maps `about.html` → `/about`. `/Litigation`, `/litigation` and
-`/business` all 308 to `/practiceareas#business-law`, so the old URL keeps its
-search equity.
+Clean URLs (`about.html` → `/about`) and the legacy redirects are rewrite rules on
+the Amplify app itself (App settings → Rewrites and redirects), not files in the
+repo. `/Litigation`, `/litigation` and `/business` all 301 to
+`/practiceareas#business-law`, so the old URL keeps its search equity.
 
 ## Working on it
 
@@ -35,7 +37,7 @@ node tools/render.mjs     # after editing tools/render.mjs, css/site.css OR js/s
 
 `tools/render.mjs` exists so the shared chrome (head, header, nav, footer, JSON-LD)
 lives in one place. It is a convenience, not a build step: the committed HTML in
-`public/` is what deploys, and Vercel never runs it.
+`public/` is what deploys, and Amplify never runs it.
 
 **Re-run it after editing `css/site.css` or `js/site.js` too.** Those two are
 served `Cache-Control: immutable` and are cache-busted by a `?v=<sha1>` query
@@ -104,7 +106,7 @@ The old palette failed WCAG AA in four places; those colours were changed:
 | Footer copyright | `#888a8c` on `#272725` | `#9a9c9e` | 4.32 → 5.43 |
 | "Learn More" label | `#828383` | `#6e7072` | 3.80 → 4.97 |
 
-## Lighthouse (mobile, compressed as Vercel serves)
+## Lighthouse (mobile, compressed)
 
 | Page | Perf | A11y | Best practices | SEO |
 |---|---|---|---|---|
@@ -126,7 +128,7 @@ pages intentionally diverge from the old Duda site from here on.
 - Business, Corporate and Real Estate law are one page addressed by fragment
   (`/practiceareas#business-law`, `#corporate-law`, `#real-estate-law`). `/Litigation`,
   `/litigation`, `/business`, `/business-law`, `/corporate`, `/real-estate` and
-  `/realestate` all 308 to the matching anchor.
+  `/realestate` all 301 to the matching anchor.
 - Phone rendered one way sitewide (`516-946-1706`); the old site used three formats.
 - Email normalised to lowercase `paul@paulrubell.com`.
 

@@ -1,9 +1,9 @@
-/* Static server that mirrors Vercel's behaviour locally: cleanUrls, case-sensitive
+/* Static server that mirrors the deployed behaviour locally: clean URLs, case-sensitive
    paths, and brotli/gzip on text. Run: node tools/qa/serve.js  ->  localhost:4321
 
-   NOTE: this does not implement vercel.json redirects, so /Litigation 404s here
-   even though it 308s to /business-law once deployed. Verify redirects against a
-   Vercel preview URL, not this server. */
+   NOTE: this does not implement the Amplify redirect rules, so /Litigation 404s here
+   even though it 301s to /practiceareas#business-law once deployed. Verify redirects
+   against the Amplify URL, not this server. */
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -15,7 +15,7 @@ const TYPES = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-
 http.createServer((req,res)=>{
   let p = decodeURIComponent(req.url.split('?')[0]);
   if (p === '/') p = '/index.html';
-  // cleanUrls emulation (case-sensitive, like Vercel)
+  // clean-URL emulation (case-sensitive, like the Amplify rewrite rules)
   let f = path.join(ROOT, p);
   if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) {
     if (fs.existsSync(f + '.html')) f = f + '.html';

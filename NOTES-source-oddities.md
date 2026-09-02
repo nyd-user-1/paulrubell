@@ -107,4 +107,4 @@ meaningfully:
   any breakpoint. Omitted; it was pure download cost.
 - **Google Analytics (UA-126104687-1)** — a Universal Analytics property, which
   Google shut down in 2023 and which no longer collects data. Not carried over;
-  add GA4 or Vercel Analytics if you want measurement.
+  add GA4 if you want measurement.
